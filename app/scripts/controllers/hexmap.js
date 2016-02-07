@@ -7,7 +7,7 @@
  * # HexmapCtrl
  * Controller of the learningAngularJsApp
  */
-angular.module('learningAngularJsApp')
+angular.module('hexMapApp')
   .controller('HexmapCtrl', function () {
   });
 

@@ -7,7 +7,7 @@
  * # MainCtrl
  * Controller of the learningAngularJsApp
  */
- angular.module('learningAngularJsApp')
+ angular.module('hexMapApp')
    .controller('MainCtrl', function ($scope, localStorageService) {
 
      var todosInStore = localStorageService.get('todos');

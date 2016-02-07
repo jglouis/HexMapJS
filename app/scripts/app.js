@@ -9,7 +9,7 @@
  * Main module of the application.
  */
 angular
-  .module('learningAngularJsApp', [
+  .module('hexMapApp', [
     'ngAnimate',
     'ngCookies',
     'ngResource',
@@ -22,9 +22,9 @@ angular
   .config(function ($routeProvider) {
     $routeProvider
       .when('/', {
-        templateUrl: 'views/main.html',
-        controller: 'MainCtrl',
-        controllerAs: 'main'
+        templateUrl: 'views/hexmap.html',
+        controller: 'HexmapCtrl',
+        controllerAs: 'hexmap'
       })
       .when('/about', {
         templateUrl: 'views/about.html',
@@ -37,7 +37,7 @@ angular
         controllerAs: 'hexmap'
       })
       .otherwise({
-        redirectTo: '/'
+        redirectTo: '/hexmap'
       });
   })
   .config(['localStorageServiceProvider', function(localStorageServiceProvider){
