@@ -36,7 +36,8 @@
     "node": ">=0.10.0"
   },
   "scripts": {
-    "test": "grunt test"
+    "test": "grunt test",
+    "start":"grunt serve"
   },
   "dependencies": {
     "jasmine-core": "^2.4.1",
