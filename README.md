@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/jglouis/HexMapJS.svg?branch=master)](https://travis-ci.org/jglouis/HexMapJS)
+
 # HexMapJS
 
 A hexagonal map generator using axial coordinates. Created as a tool to test gameplay elements for the Hexode project (https://github.com/jglouis/HexodeProject).
