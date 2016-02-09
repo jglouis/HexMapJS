@@ -25,7 +25,7 @@ angular.module('hexMapApp')
       this.canvasOriginX = 0;
       this.canvasOriginY = 0;
 
-      this.canvas.addEventListener('mousedown', this.clickEvent.bind(this), false);
+      this.stage = new createjs.Stage(canvasId);
   }
 
   HexagonGrid.prototype.drawHexGrid = function (radius, originX, originY) {
@@ -40,8 +40,8 @@ angular.module('hexMapApp')
           if (this.Distance(a,b) > 3){
             continue;
           }
-          var pixel = this.hexToPixel(u,v);
-          this.drawHex(pixel[0], pixel[1], '#ddd', '(' + u + ',' + v + ')');
+
+          this.drawHex(u, v, '#ddd', '(' + u + ',' + v + ')');
         }
       }
   };
@@ -66,59 +66,36 @@ angular.module('hexMapApp')
     return [q, r];
   };
 
-  HexagonGrid.prototype.drawHex = function(x0, y0, fillColor, debugText) {
-      this.context.strokeStyle = '#000';
-      this.context.beginPath();
-      this.context.moveTo(x0 + this.width - this.side, y0);
-      this.context.lineTo(x0 + this.side, y0);
-      this.context.lineTo(x0 + this.width, y0 + (this.height / 2));
-      this.context.lineTo(x0 + this.side, y0 + this.height);
-      this.context.lineTo(x0 + this.width - this.side, y0 + this.height);
-      this.context.lineTo(x0, y0 + (this.height / 2));
+  HexagonGrid.prototype.drawHex = function(u, v, fillColor, debugText) {
+      var pixel = this.hexToPixel(u,v);
 
-      if (fillColor) {
-          this.context.fillStyle = fillColor;
-          this.context.fill();
-      }
+      var hexagon = new createjs.Shape();
+      hexagon.hexcoord = {u:u, v:v};
 
-      this.context.closePath();
-      this.context.stroke();
+      hexagon.graphics.beginFill('Grey');
+      hexagon.graphics.beginStroke('black');
+      hexagon.graphics.moveTo(pixel[0] + this.width - this.side, pixel[1])
+      .lineTo(pixel[0] + this.side, pixel[1])
+      .lineTo(pixel[0] + this.width, pixel[1] + (this.height / 2))
+      .lineTo(pixel[0] + this.side, pixel[1] + this.height)
+      .lineTo(pixel[0] + this.width - this.side, pixel[1] + this.height)
+      .lineTo(pixel[0], pixel[1] + (this.height / 2))
+      .lineTo(pixel[0] + this.width - this.side, pixel[1]);
 
+      // Add mouse event
+      hexagon.on('click', function(e){
+        console.log(e.target.hexcoord);
+      });
+
+      this.stage.addChild(hexagon);
+      this.stage.update();
+
+      //TODO make it work
       if (debugText) {
           this.context.font = '8px';
           this.context.fillStyle = '#000';
-          this.context.fillText(debugText, x0 + (this.width / 2) - (this.width/4), y0 + (this.height - 5));
+          this.context.fillText(debugText, pixel[0] + (this.width / 2) - (this.width/4), pixel[1] + (this.height - 5));
       }
-  };
-
-  //Recusivly step up to the body to calculate canvas offset.
-  HexagonGrid.prototype.getRelativeCanvasOffset = function() {
-  	var x = 0, y = 0;
-  	var layoutElement = this.canvas;
-      if (layoutElement.offsetParent) {
-          do {
-              x += layoutElement.offsetLeft;
-              y += layoutElement.offsetTop;
-          } while (layoutElement === layoutElement.offsetParent);
-
-          return { x: x, y: y };
-      }
-  };
-
-  HexagonGrid.prototype.clickEvent = function (e) {
-      var mouseX = e.pageX - this.canvas.offsetLeft - Math.floor(this.width/2);
-      var mouseY = e.pageY - this.canvas.offsetTop - this.height/2;
-
-      var localX = mouseX - this.canvasOriginX;
-      var localY = mouseY - this.canvasOriginY;
-
-      console.log({x: localX, y: localY});
-      var hex = this.pixelToHex(mouseX, mouseY);
-      console.log({u:hex[0], v:hex[1]});
-
-      var pixel = this.hexToPixel(hex[0],hex[1]);
-
-      this.drawHex(pixel[0], pixel[1], 'rgba(110,110,70,0.3)', '');
   };
 
   HexagonGrid.prototype.Distance = function(a, b){
