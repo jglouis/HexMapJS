@@ -26,6 +26,7 @@ angular.module('hexMapApp')
       this.canvasOriginY = 0;
 
       this.stage = new createjs.Stage(canvasId);
+      this.stage.enableMouseOver(20);
   }
 
   HexagonGrid.prototype.drawHexGrid = function (radius, originX, originY) {
@@ -66,36 +67,34 @@ angular.module('hexMapApp')
     return [q, r];
   };
 
-  HexagonGrid.prototype.drawHex = function(u, v, fillColor, debugText) {
+  HexagonGrid.prototype.drawHex = function(u, v) {
       var pixel = this.hexToPixel(u,v);
 
       var hexagon = new createjs.Shape();
       hexagon.hexcoord = {u:u, v:v};
 
-      hexagon.graphics.beginFill('Grey');
+      var fillCommand = hexagon.graphics.beginFill('Grey').command;
       hexagon.graphics.beginStroke('black');
-      hexagon.graphics.moveTo(pixel[0] + this.width - this.side, pixel[1])
-      .lineTo(pixel[0] + this.side, pixel[1])
-      .lineTo(pixel[0] + this.width, pixel[1] + (this.height / 2))
-      .lineTo(pixel[0] + this.side, pixel[1] + this.height)
-      .lineTo(pixel[0] + this.width - this.side, pixel[1] + this.height)
-      .lineTo(pixel[0], pixel[1] + (this.height / 2))
-      .lineTo(pixel[0] + this.width - this.side, pixel[1]);
+      hexagon.graphics.drawPolyStar(pixel[0], pixel[1], this.width/2, 6, 0 , 0);
 
       // Add mouse event
       hexagon.on('click', function(e){
         console.log(e.target.hexcoord);
       });
+      hexagon.on('mouseover', function(e){
+        fillCommand.style = 'blue';
+        this.stage.update(e);
+      });
+      hexagon.on('mouseout', function(e){
+        fillCommand.style = 'grey';
+        this.stage.update(e);
+      });
 
       this.stage.addChild(hexagon);
       this.stage.update();
 
-      //TODO make it work
-      if (debugText) {
-          this.context.font = '8px';
-          this.context.fillStyle = '#000';
-          this.context.fillText(debugText, pixel[0] + (this.width / 2) - (this.width/4), pixel[1] + (this.height - 5));
-      }
+      return hexagon.graphics;
+
   };
 
   HexagonGrid.prototype.Distance = function(a, b){
