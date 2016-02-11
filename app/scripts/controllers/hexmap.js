@@ -15,12 +15,11 @@ angular.module('hexMapApp')
   function HexagonGrid(canvasId, radius) {
       this.radius = radius;
 
-      this.height = Math.sqrt(3) * radius;
-      this.width = 2 * radius;
-      this.side = (3 / 2) * radius;
-
       this.canvas = document.getElementById(canvasId);
       this.context = this.canvas.getContext('2d');
+
+      // All the hexagons indexed by hexagonal coordinates [u,v]
+      this.hexagons = {};
 
       this.canvasOriginX = 0;
       this.canvasOriginY = 0;
@@ -42,9 +41,13 @@ angular.module('hexMapApp')
             continue;
           }
 
-          this.drawHex(u, v, '#ddd', '(' + u + ',' + v + ')');
+          this.addHex(u, v);
         }
       }
+  };
+
+  HexagonGrid.prototype.setHexColor = function(u,v, color){
+    this.hexagons[[u,v]].graphics._fill.style = color;
   };
 
   HexagonGrid.prototype.hexToPixel = function(u,v){
@@ -67,7 +70,7 @@ angular.module('hexMapApp')
     return [q, r];
   };
 
-  HexagonGrid.prototype.drawHex = function(u, v) {
+  HexagonGrid.prototype.addHex = function(u, v) {
       var pixel = this.hexToPixel(u,v);
 
       var hexagon = new createjs.Shape();
@@ -75,23 +78,27 @@ angular.module('hexMapApp')
 
       var fillCommand = hexagon.graphics.beginFill('Grey').command;
       hexagon.graphics.beginStroke('black');
-      hexagon.graphics.drawPolyStar(pixel[0], pixel[1], this.width/2, 6, 0 , 0);
+      hexagon.graphics.drawPolyStar(pixel[0], pixel[1], this.radius, 6, 0 , 0);
 
       // Add mouse event
       hexagon.on('click', function(e){
         console.log(e.target.hexcoord);
       });
+      var originalColor;
       hexagon.on('mouseover', function(e){
+        originalColor = fillCommand.style;
         fillCommand.style = 'blue';
         this.stage.update(e);
       });
       hexagon.on('mouseout', function(e){
-        fillCommand.style = 'grey';
+        fillCommand.style = originalColor;
         this.stage.update(e);
       });
 
       this.stage.addChild(hexagon);
       this.stage.update();
+
+      this.hexagons[[u,v]] = hexagon;
 
       return hexagon.graphics;
 
