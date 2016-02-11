@@ -111,12 +111,19 @@
  };
 
 angular.module('hexMapApp')
-  .controller('HexmapCtrl', ['$scope', function($scope) {
+  .controller('HexmapCtrl', function($scope, localStorageService) {
+      var hexagonsColorInStore = localStorageService.get('hexagonsColor');
+
+      $scope.hexagonsColor = hexagonsColorInStore || {};
+
+      $scope.$watch('hexagonsColor', function(){
+        console.log('watched');
+        localStorageService.set('hexagonsColor', $scope.hexagonsColor);
+      }, true);
+
       var hexagonGrid = new HexagonGrid('HexCanvas', 50);
       hexagonGrid.drawHexGrid(6, 300, 300);
       hexagonGrid.setHexColor(0,0,'red');
-
-      $scope.hexagonsColor = {};
 
       $scope.submit = function(){
         var u = hexagonGrid.selectedCoord.u;
@@ -127,4 +134,8 @@ angular.module('hexMapApp')
         hexagonGrid.setHexColor(u,v,this.hexColor);
       };
 
-    }]);
+      $scope.removeHexColor = function(key){
+        delete $scope.hexagonsColor[key];
+      };
+
+    });

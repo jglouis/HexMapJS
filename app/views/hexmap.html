@@ -1,14 +1,24 @@
-<form role="form" ng-submit="submit()">
-  <div class="row">
-    <div class="input-group">
-      <input type="text" ng-model="hexColor" placeholder="Color?" class="form-control">
-      <span class="input-group-btn">
-        <input type="submit" class="btn btn-primary" value="Add">
-      </span>
+<div class="container">
+  <form role="form" ng-submit="submit()">
+    <div class="row">
+      <div class="input-group">
+        <input type="text" ng-model="hexColor" placeholder="Color?" class="form-control">
+        <span class="input-group-btn">
+          <input type="submit" class="btn btn-primary" value="Add">
+        </span>
+      </div>
     </div>
+    <pre>hexagons color={{hexagonsColor}}</pre>
+  </form>
+
+  <div ui-sortable ng-model="todos">
+    <p class="input-group" ng-repeat="(coord, color) in hexagonsColor" style="padding:5px 10px; cursor: move;">
+      <input type="text" ng-model="color" class="form-control">
+      <span class="input-group-btn">
+        <button class="btn btn-danger" ng-click="removeHexColor(coord)" aria-label="Remove">X</button>
+      </span>
+    </p>
   </div>
-  <pre>hexagons color={{hexagonsColor}}</pre>
-</form>
 
-
-<canvas id="HexCanvas" width="1000" height="700" class='img-responsive' style="border: 1px solid black;"></canvas>
+  <canvas id="HexCanvas" width="1000" height="700" class='img-responsive' style="border: 1px solid black;"></canvas>
+</div>
