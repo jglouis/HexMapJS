@@ -50,7 +50,7 @@
      if ([u,v] in this.hexagons){
        this.hexagons[[u,v]].graphics._fill.style = color;
        this.stage.update();
-     }     
+     }
    }
  };
 
@@ -130,14 +130,14 @@ angular.module('hexMapApp')
 
         localStorageService.set('arcOfFire', $scope.arcOfFire);
 
-        for (let i = 0; i < oldCoord.length; i++){
-          let coord = oldCoord[i];
-          hexagonGrid.setHexColor(coord.u,coord.v,'grey');
+        for (var i = 0; i < oldCoord.length; i++){
+          var ocoord = oldCoord[i];
+          hexagonGrid.setHexColor(ocoord.u,ocoord.v,'grey');
         }
 
-        for (let i = 0; i < newCoord.length; i++){
-          let coord = newCoord[i];
-          hexagonGrid.setHexColor(coord.u,coord.v,'red');
+        for (i = 0; i < newCoord.length; i++){
+          var ncoord = newCoord[i];
+          hexagonGrid.setHexColor(ncoord.u,ncoord.v,'red');
         }
 
       }, true);
