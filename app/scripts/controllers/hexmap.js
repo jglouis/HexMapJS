@@ -46,8 +46,12 @@
  };
 
  HexagonGrid.prototype.setHexColor = function(u,v, color){
-   this.hexagons[[u,v]].graphics._fill.style = color;
-   this.stage.update();
+   if (typeof u !== 'undefined' && typeof v !== 'undefined'){
+     if ([u,v] in this.hexagons){
+       this.hexagons[[u,v]].graphics._fill.style = color;
+       this.stage.update();
+     }     
+   }
  };
 
  HexagonGrid.prototype.hexToPixel = function(u,v){
@@ -112,30 +116,43 @@
 
 angular.module('hexMapApp')
   .controller('HexmapCtrl', function($scope, localStorageService) {
-      var hexagonsColorInStore = localStorageService.get('hexagonsColor');
-
-      $scope.hexagonsColor = hexagonsColorInStore || {};
-
-      $scope.$watch('hexagonsColor', function(){
-        console.log('watched');
-        localStorageService.set('hexagonsColor', $scope.hexagonsColor);
-      }, true);
-
       var hexagonGrid = new HexagonGrid('HexCanvas', 50);
-      hexagonGrid.drawHexGrid(6, 300, 300);
-      hexagonGrid.setHexColor(0,0,'red');
 
-      $scope.submit = function(){
+      hexagonGrid.drawHexGrid(6, 300, 300);
+      $scope.hexagonGrid = hexagonGrid;
+
+      var arcOfFireInStore = localStorageService.get('arcOfFire');
+
+      $scope.arcOfFire = arcOfFireInStore || [];
+
+      $scope.$watch('arcOfFire', function(newCoord, oldCoord){
+        console.log(newCoord, oldCoord);
+
+        localStorageService.set('arcOfFire', $scope.arcOfFire);
+
+        for (let i = 0; i < oldCoord.length; i++){
+          let coord = oldCoord[i];
+          hexagonGrid.setHexColor(coord.u,coord.v,'grey');
+        }
+
+        for (let i = 0; i < newCoord.length; i++){
+          let coord = newCoord[i];
+          hexagonGrid.setHexColor(coord.u,coord.v,'red');
+        }
+
+      }, true);
+      $scope.addArcOfFire = function(){
         var u = hexagonGrid.selectedCoord.u;
         var v = hexagonGrid.selectedCoord.v;
-        $scope.hexagonsColor[[u,v]] = this.hexColor;
+
+        $scope.arcOfFire.push(hexagonGrid.selectedCoord);
 
         // Set the color of the hex
-        hexagonGrid.setHexColor(u,v,this.hexColor);
+        $scope.hexagonGrid.setHexColor(u,v,'red');
       };
 
-      $scope.removeHexColor = function(key){
-        delete $scope.hexagonsColor[key];
+      $scope.removeArcOfFire = function(index){
+        $scope.arcOfFire.splice(index, 1);
       };
 
     });
