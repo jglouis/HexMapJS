@@ -115,7 +115,14 @@
  };
 
 angular.module('hexMapApp')
-  .controller('HexmapCtrl', function($scope, localStorageService) {
+  .controller('HexmapCtrl', function($scope, $http, localStorageService) {
+      // Load weapons.json
+      $http.get('../data/weapons.json')
+        .then(function(res){
+          $scope.weapons = res.data;
+          console.log($scope.weapons);
+        });
+
       var hexagonGrid = new HexagonGrid('HexCanvas', 50);
 
       hexagonGrid.drawHexGrid(6, 300, 300);
