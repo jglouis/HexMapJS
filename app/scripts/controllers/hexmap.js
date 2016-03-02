@@ -23,7 +23,20 @@
 
      this.stage = new createjs.Stage(canvasId);
      this.stage.enableMouseOver(20);
+
+
  }
+
+ HexagonGrid.prototype.addLabel = function (u, v, label) {
+    var pixel = this.hexToPixel(u,v);
+
+    var text = new createjs.Text(label, '20px Arial', '#ffffff');
+    text.x = pixel[0];
+    text.y = pixel[1];
+    text.textBaseline = 'alphabetic';
+    this.stage.addChild(text);
+    this.stage.update(event);
+  };
 
  HexagonGrid.prototype.drawHexGrid = function (radius, originX, originY) {
      this.canvasOriginX = originX;
@@ -142,6 +155,7 @@ angular.module('hexMapApp')
             for (i = 0; i < newSelectedWeapons[n].arcOfFire.length; i++){
               var ncoord = newSelectedWeapons[n].arcOfFire[i];
               hexagonGrid.setHexColor(ncoord.u,ncoord.v,'red');
+              hexagonGrid.addLabel(ncoord.u,ncoord.v,newSelectedWeapons[n].strength);
             }
           }
         }
