@@ -1,25 +1,13 @@
 <div class="container">
-  <form role="form" ng-submit="addArcOfFire()">
-    <div class="row">
-      <div class="input-group">
-        <input type="text" ng-model="coord" placeholder="Coord?" class="form-control">
-        <span class="input-group-btn">
-          <input type="submit" class="btn btn-primary" value="Add">
-        </span>
-      </div>
-    </div>
-    <pre>arcOfFire={{arcOfFire}}</pre>
-  </form>
 
-  <div ng-model="arcOfFire">
-    <p class="input-group" ng-repeat="coord in arcOfFire" style="padding:5px 10px; cursor: move;">
-      <input type="number" ng-model="coord.u" class="form-control">
-      <input type="number" ng-model="coord.v" class="form-control">
-      <span class="input-group-btn">
-        <button class="btn btn-danger" ng-click="removeArcOfFire($index)" aria-label="Remove">X</button>
-      </span>
-    </p>
-  </div>
+  <div
+      isteven-multi-select
+      input-model="weapons"
+      output-model="selectedWeapons"
+      button-label="icon name"
+      item-label="icon name maker"
+      tick-property="ticked"
+  ></div>
 
   <canvas id="HexCanvas" width="1000" height="700" class='img-responsive' style="border: 1px solid black;"></canvas>
 </div>

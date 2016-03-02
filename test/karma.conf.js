@@ -35,6 +35,7 @@ module.exports = function(config) {
       'bower_components/angular-ui-sortable/sortable.js',
       'bower_components/angular-local-storage/dist/angular-local-storage.js',
       'bower_components/EaselJS/lib/easeljs-0.8.2.combined.js',
+      'bower_components/isteven-angular-multiselect/isteven-multi-select.js',
       'bower_components/angular-mocks/angular-mocks.js',
       // endbower
       "app/scripts/**/*.js",
