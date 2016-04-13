@@ -34,8 +34,6 @@
  HexagonGrid.prototype.addLabel = function (u, v, label) {
     // Check if the label already exists, so it doesn't get recreated
     if(!([u,v] in this.labels)){
-      console.log('Creating new label...', u, v);
-
       var pixel = this.hexToPixel(u,v);
       var text = new createjs.Text(label, '20px Arial', '#ffffff');
       text.x = pixel[0];
@@ -50,8 +48,6 @@
     } else {
       this.labels[[u,v]].text = label;
     }
-
-    console.log('labels', this.labels);
 
     // Update the stage
     this.stage.update();
@@ -75,8 +71,6 @@
          this.addHex(u, v);
        }
      }
-
-     console.log('hexagons', this.hexagons);
  };
 
  HexagonGrid.prototype.setHexColor = function(u,v, color){
@@ -121,7 +115,7 @@
 
      // Add mouse event
      hexagon.on('click', function(e){
-       console.log(e.target.hexcoord);
+       console.log('clicked on', e.target.hexcoord);
        hexagonGrid.selectedCoord = e.target.hexcoord;
      });
      var originalColor;
@@ -159,8 +153,6 @@ angular.module('hexMapApp')
       var hexagonGrid = new HexagonGrid('HexCanvas', 50);
 
       $scope.$watch('selectedWeapons', function(newSelectedWeapons, oldSelectedWeapons){
-        console.log(newSelectedWeapons, oldSelectedWeapons);
-
         var n,i;
 
         if (typeof oldSelectedWeapons !== 'undefined'){
@@ -186,13 +178,7 @@ angular.module('hexMapApp')
               }
             }
           }
-
-          console.log('strengthByCoordinates', strengthByCoordinates);
-
           for (var coordStrength in strengthByCoordinates){
-
-            console.log(coordStrength.split(',')[0]);
-            console.log(coordStrength.split(',')[1]);
             hexagonGrid.addLabel(coordStrength.split(',')[0],coordStrength.split(',')[1],strengthByCoordinates[coordStrength]);
           }
         }
