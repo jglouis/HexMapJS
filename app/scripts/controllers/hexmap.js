@@ -35,9 +35,9 @@
     // Check if the label already exists, so it doesn't get recreated
     if(!([u,v] in this.labels)){
       var pixel = this.hexToPixel(u,v);
-      var text = new createjs.Text(label, '20px Arial', '#ffffff');
-      text.x = pixel[0];
-      text.y = pixel[1];
+      var text = new createjs.Text(label, '60px Arial', '#ffffff');
+      text.x = pixel[0] - 15;
+      text.y = pixel[1] + 15;
       text.textBaseline = 'alphabetic';
 
       // Add the text label to dictionary
