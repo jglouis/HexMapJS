@@ -1,7 +1,7 @@
 [
   {
     "name": "star lance",
-    "arcOfFire":[{"u":1,"v":0},{"u":2,"v":0}],
+    "arcOfFire":[{"u":-1,"v":0},{"u":-2,"v":0}],
     "strength": 2
   },
   {
