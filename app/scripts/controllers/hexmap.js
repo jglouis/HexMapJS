@@ -53,6 +53,19 @@
     this.stage.update();
   };
 
+// Add a sprite
+ HexagonGrid.prototype.addSprite = function (u, v, image){
+   var pixel = this.hexToPixel(u,v);
+
+   var bitmap = new createjs.Bitmap(image);
+   bitmap.x = pixel[0] - 40;
+   bitmap.y = pixel[1] - 40;
+   bitmap.scaleX = 0.4;
+   bitmap.scaleY = 0.4;
+   this.stage.addChild(bitmap);
+   this.stage.update(event);
+ };
+
  HexagonGrid.prototype.drawHexGrid = function (radius, originX, originY) {
      this.canvasOriginX = originX;
      this.canvasOriginY = originY;
@@ -189,6 +202,10 @@ angular.module('hexMapJsApp')
       }, true);
 
       hexagonGrid.drawHexGrid(6, 300, 300);
+
+      // Add space ship in the center
+      hexagonGrid.addSprite(0, 0, 'images/space_ship_200x200.png');
+
       $scope.hexagonGrid = hexagonGrid;
 
     });
