@@ -2,9 +2,9 @@
 
 /**
  * @ngdoc overview
- * @name learningAngularJsApp
+ * @name hexmapjs
  * @description
- * # learningAngularJsApp
+ * # hexmapjs
  *
  * Main module of the application.
  */
@@ -36,6 +36,11 @@ angular
         templateUrl: 'views/hexmap.html',
         controller: 'HexmapCtrl',
         controllerAs: 'hexmap'
+      })
+      .when('/arcoffire', {
+        templateUrl: 'views/arcoffire.html',
+        controller: 'ArcoffireCtrl',
+        controllerAs: 'arcoffire'
       })
       .otherwise({
         redirectTo: '/hexmap'
