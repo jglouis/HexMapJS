@@ -160,9 +160,13 @@ angular.module('hexMapApp')
             for (i = 0; i < oldSelectedWeapons[n].arcOfFire.length; i++){
               var ocoord = oldSelectedWeapons[n].arcOfFire[i];
               hexagonGrid.setHexColor(ocoord.u,ocoord.v,'grey');
+
+              // Remove corresponding labels
+              hexagonGrid.addLabel(ocoord.u, ocoord.v, '');
             }
           }
         }
+
         if (typeof newSelectedWeapons !== 'undefined'){
           var strengthByCoordinates = {};
 
