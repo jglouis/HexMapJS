@@ -13,7 +13,8 @@
     "angular-ui-sortable": "^0.13.4",
     "jquery-ui": "^1.11.4",
     "angular-local-storage": "^0.2.3",
-    "EaselJS": "^0.8.2"
+    "EaselJS": "^0.8.2",
+    "isteven-angular-multiselect": "angular-multi-select#^4.0.0"
   },
   "devDependencies": {
     "angular-mocks": "^1.4.0"

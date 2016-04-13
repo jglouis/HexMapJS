@@ -17,7 +17,8 @@ angular
     'ngSanitize',
     'ngTouch',
     'ui.sortable',
-    'LocalStorageModule'
+    'LocalStorageModule',
+    'isteven-multi-select'
   ])
   .config(function ($routeProvider) {
     $routeProvider
