@@ -15,15 +15,43 @@
      this.canvas = document.getElementById(canvasId);
      this.context = this.canvas.getContext('2d');
 
-     // All the hexagons indexed by hexagonal coordinates [u,v]
+     // All the hexagons, indexed by hexagonal coordinates [u,v]
      this.hexagons = {};
+
+     // All the labels, indexed by hexagonal coordinates [u,v]
+     this.labels = {};
 
      this.canvasOriginX = 0;
      this.canvasOriginY = 0;
 
      this.stage = new createjs.Stage(canvasId);
      this.stage.enableMouseOver(20);
+
+
  }
+
+ // Add or update a text label to the given coordinates
+ HexagonGrid.prototype.addLabel = function (u, v, label) {
+    // Check if the label already exists, so it doesn't get recreated
+    if(!([u,v] in this.labels)){
+      var pixel = this.hexToPixel(u,v);
+      var text = new createjs.Text(label, '20px Arial', '#ffffff');
+      text.x = pixel[0];
+      text.y = pixel[1];
+      text.textBaseline = 'alphabetic';
+
+      // Add the text label to dictionary
+      this.labels[[u,v]] = text;
+
+      // Add the text label to the stage
+      this.stage.addChild(text);
+    } else {
+      this.labels[[u,v]].text = label;
+    }
+
+    // Update the stage
+    this.stage.update();
+  };
 
  HexagonGrid.prototype.drawHexGrid = function (radius, originX, originY) {
      this.canvasOriginX = originX;
@@ -87,7 +115,7 @@
 
      // Add mouse event
      hexagon.on('click', function(e){
-       console.log(e.target.hexcoord);
+       console.log('clicked on', e.target.hexcoord);
        hexagonGrid.selectedCoord = e.target.hexcoord;
      });
      var originalColor;
@@ -115,44 +143,52 @@
  };
 
 angular.module('hexMapApp')
-  .controller('HexmapCtrl', function($scope, localStorageService) {
+  .controller('HexmapCtrl', function($scope, $http) {
+      // Load weapons.json
+      $http.get('../data/weapons.json')
+        .then(function(res){
+          $scope.weapons = res.data;
+        });
+
       var hexagonGrid = new HexagonGrid('HexCanvas', 50);
+
+      $scope.$watch('selectedWeapons', function(newSelectedWeapons, oldSelectedWeapons){
+        var n,i;
+
+        if (typeof oldSelectedWeapons !== 'undefined'){
+          for (n = 0; n < oldSelectedWeapons.length; n++){
+            for (i = 0; i < oldSelectedWeapons[n].arcOfFire.length; i++){
+              var ocoord = oldSelectedWeapons[n].arcOfFire[i];
+              hexagonGrid.setHexColor(ocoord.u,ocoord.v,'grey');
+
+              // Remove corresponding labels
+              hexagonGrid.addLabel(ocoord.u, ocoord.v, '');
+            }
+          }
+        }
+
+        if (typeof newSelectedWeapons !== 'undefined'){
+          var strengthByCoordinates = {};
+
+          for (n = 0; n < newSelectedWeapons.length; n++){
+            for (i = 0; i < newSelectedWeapons[n].arcOfFire.length; i++){
+              var ncoord = newSelectedWeapons[n].arcOfFire[i];
+              hexagonGrid.setHexColor(ncoord.u,ncoord.v,'red');
+              hexagonGrid.addLabel(ncoord.u,ncoord.v,newSelectedWeapons[n].strength);
+              if([ncoord.u,ncoord.v] in strengthByCoordinates){
+                strengthByCoordinates[[ncoord.u,ncoord.v]] += newSelectedWeapons[n].strength;
+              } else {
+                strengthByCoordinates[[ncoord.u,ncoord.v]] = newSelectedWeapons[n].strength;
+              }
+            }
+          }
+          for (var coordStrength in strengthByCoordinates){
+            hexagonGrid.addLabel(coordStrength.split(',')[0],coordStrength.split(',')[1],strengthByCoordinates[coordStrength]);
+          }
+        }
+      }, true);
 
       hexagonGrid.drawHexGrid(6, 300, 300);
       $scope.hexagonGrid = hexagonGrid;
-
-      var arcOfFireInStore = localStorageService.get('arcOfFire');
-
-      $scope.arcOfFire = arcOfFireInStore || [];
-
-      $scope.$watch('arcOfFire', function(newCoord, oldCoord){
-        console.log(newCoord, oldCoord);
-
-        localStorageService.set('arcOfFire', $scope.arcOfFire);
-
-        for (var i = 0; i < oldCoord.length; i++){
-          var ocoord = oldCoord[i];
-          hexagonGrid.setHexColor(ocoord.u,ocoord.v,'grey');
-        }
-
-        for (i = 0; i < newCoord.length; i++){
-          var ncoord = newCoord[i];
-          hexagonGrid.setHexColor(ncoord.u,ncoord.v,'red');
-        }
-
-      }, true);
-      $scope.addArcOfFire = function(){
-        var u = hexagonGrid.selectedCoord.u;
-        var v = hexagonGrid.selectedCoord.v;
-
-        $scope.arcOfFire.push(hexagonGrid.selectedCoord);
-
-        // Set the color of the hex
-        $scope.hexagonGrid.setHexColor(u,v,'red');
-      };
-
-      $scope.removeArcOfFire = function(index){
-        $scope.arcOfFire.splice(index, 1);
-      };
 
     });

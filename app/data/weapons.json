@@ -1,0 +1,17 @@
+[
+  {
+    "name": "star lance",
+    "arcOfFire":[{"u":1,"v":0},{"u":2,"v":0}],
+    "strength": 2
+  },
+  {
+    "name": "macro cannons",
+    "arcOfFire":[{"u":0,"v":-1},{"u":1,"v":-1},{"u":-1,"v":1},{"u":0,"v":1}],
+    "strength": 1
+  },
+  {
+    "name": "turret",
+    "arcOfFire":[{"u":1,"v":0},{"u":0,"v":-1},{"u":1,"v":-1},{"u":-1,"v":1},{"u":0,"v":1},{"u":-1,"v":0}],
+    "strength": 1
+  }
+]
