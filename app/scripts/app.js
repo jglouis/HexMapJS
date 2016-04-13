@@ -2,14 +2,14 @@
 
 /**
  * @ngdoc overview
- * @name hexmapjs
+ * @name hexMapJS
  * @description
- * # hexmapjs
+ * # hexMapJS
  *
  * Main module of the application.
  */
 angular
-  .module('hexMapApp', [
+  .module('hexMapJsApp', [
     'ngAnimate',
     'ngCookies',
     'ngResource',
@@ -23,9 +23,9 @@ angular
   .config(function ($routeProvider) {
     $routeProvider
       .when('/', {
-        templateUrl: 'views/hexmap.html',
-        controller: 'HexmapCtrl',
-        controllerAs: 'hexmap'
+        templateUrl: 'views/main.html',
+        controller: 'MainCtrl',
+        controllerAs: 'main'
       })
       .when('/about', {
         templateUrl: 'views/about.html',
@@ -42,8 +42,18 @@ angular
         controller: 'ArcoffireCtrl',
         controllerAs: 'arcoffire'
       })
+      .when('/arcoffire', {
+        templateUrl: 'views/arcoffire.html',
+        controller: 'ArcoffireCtrl',
+        controllerAs: 'arcoffire'
+      })
+      .when('/arcoffire', {
+        templateUrl: 'views/arcoffire.html',
+        controller: 'ArcoffireCtrl',
+        controllerAs: 'arcoffire'
+      })
       .otherwise({
-        redirectTo: '/hexmap'
+        redirectTo: '/'
       });
   })
   .config(['localStorageServiceProvider', function(localStorageServiceProvider){

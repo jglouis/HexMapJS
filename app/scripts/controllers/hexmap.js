@@ -142,7 +142,7 @@
    return (Math.abs(a.u - b.u) + Math.abs(a.u + a.v - b.u - b.v) + Math.abs(a.v - b.v)) / 2;
  };
 
-angular.module('hexMapApp')
+angular.module('hexMapJsApp')
   .controller('HexmapCtrl', function($scope, $http) {
       // Load weapons.json
       $http.get('../data/weapons.json')

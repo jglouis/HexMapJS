@@ -2,12 +2,12 @@
 
 /**
  * @ngdoc function
- * @name hexMapJS.controller:ArcoffireCtrl
+ * @name hexMapJsApp.controller:ArcoffireCtrl
  * @description
  * # ArcoffireCtrl
- * Controller of the hexMapJS
+ * Controller of the hexMapJsApp
  */
-angular.module('hexMapApp')
+angular.module('hexMapJsApp')
   .controller('ArcoffireCtrl', function () {
     this.awesomeThings = [
       'HTML5 Boilerplate',

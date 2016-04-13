@@ -3,7 +3,7 @@
 describe('Controller: ArcoffireCtrl', function () {
 
   // load the controller's module
-  beforeEach(module('hexMapJS'));
+  beforeEach(module('hexMapJsApp'));
 
   var ArcoffireCtrl,
     scope;
@@ -16,8 +16,4 @@ describe('Controller: ArcoffireCtrl', function () {
       // place here mocked dependencies
     });
   }));
-
-  it('should attach a list of awesomeThings to the scope', function () {
-    expect(ArcoffireCtrl.awesomeThings.length).toBe(3);
-  });
 });
