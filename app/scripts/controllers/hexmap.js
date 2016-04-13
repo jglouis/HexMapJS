@@ -15,8 +15,11 @@
      this.canvas = document.getElementById(canvasId);
      this.context = this.canvas.getContext('2d');
 
-     // All the hexagons indexed by hexagonal coordinates [u,v]
+     // All the hexagons, indexed by hexagonal coordinates [u,v]
      this.hexagons = {};
+
+     // All the labels, indexed by hexagonal coordinates [u,v]
+     this.labels = {};
 
      this.canvasOriginX = 0;
      this.canvasOriginY = 0;
@@ -27,15 +30,31 @@
 
  }
 
+ // Add or update a text label to the given coordinates
  HexagonGrid.prototype.addLabel = function (u, v, label) {
-    var pixel = this.hexToPixel(u,v);
+    // Check if the label already exists, so it doesn't get recreated
+    if(!([u,v] in this.labels)){
+      console.log('Creating new label...', u, v);
 
-    var text = new createjs.Text(label, '20px Arial', '#ffffff');
-    text.x = pixel[0];
-    text.y = pixel[1];
-    text.textBaseline = 'alphabetic';
-    this.stage.addChild(text);
-    this.stage.update(event);
+      var pixel = this.hexToPixel(u,v);
+      var text = new createjs.Text(label, '20px Arial', '#ffffff');
+      text.x = pixel[0];
+      text.y = pixel[1];
+      text.textBaseline = 'alphabetic';
+
+      // Add the text label to dictionary
+      this.labels[[u,v]] = text;
+
+      // Add the text label to the stage
+      this.stage.addChild(text);
+    } else {
+      this.labels[[u,v]].text = label;
+    }
+
+    console.log('labels', this.labels);
+
+    // Update the stage
+    this.stage.update();
   };
 
  HexagonGrid.prototype.drawHexGrid = function (radius, originX, originY) {
@@ -56,6 +75,8 @@
          this.addHex(u, v);
        }
      }
+
+     console.log('hexagons', this.hexagons);
  };
 
  HexagonGrid.prototype.setHexColor = function(u,v, color){
@@ -151,12 +172,28 @@ angular.module('hexMapApp')
           }
         }
         if (typeof newSelectedWeapons !== 'undefined'){
+          var strengthByCoordinates = {};
+
           for (n = 0; n < newSelectedWeapons.length; n++){
             for (i = 0; i < newSelectedWeapons[n].arcOfFire.length; i++){
               var ncoord = newSelectedWeapons[n].arcOfFire[i];
               hexagonGrid.setHexColor(ncoord.u,ncoord.v,'red');
               hexagonGrid.addLabel(ncoord.u,ncoord.v,newSelectedWeapons[n].strength);
+              if([ncoord.u,ncoord.v] in strengthByCoordinates){
+                strengthByCoordinates[[ncoord.u,ncoord.v]] += newSelectedWeapons[n].strength;
+              } else {
+                strengthByCoordinates[[ncoord.u,ncoord.v]] = newSelectedWeapons[n].strength;
+              }
             }
+          }
+
+          console.log('strengthByCoordinates', strengthByCoordinates);
+
+          for (var coordStrength in strengthByCoordinates){
+
+            console.log(coordStrength.split(',')[0]);
+            console.log(coordStrength.split(',')[1]);
+            hexagonGrid.addLabel(coordStrength.split(',')[0],coordStrength.split(',')[1],strengthByCoordinates[coordStrength]);
           }
         }
       }, true);
