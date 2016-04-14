@@ -72,12 +72,12 @@
 
      this.selectedCoord = {u:0, v:0};
 
-     for (var u = -radius; u < radius; u++){
-       for (var v = -radius; v < radius; v++){
+     for (var u = -radius; u <= radius; u++){
+       for (var v = -radius; v <= radius; v++){
          var a = {u: u, v: v};
          var b = {u: 0, v: 0};
 
-         if (this.Distance(a,b) > 3){
+         if (this.Distance(a,b) > radius){
            continue;
          }
 
