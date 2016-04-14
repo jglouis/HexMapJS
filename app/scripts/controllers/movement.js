@@ -2,20 +2,20 @@
 
 /**
  * @ngdoc function
- * @name hexMapJsApp.controller:ArcoffireCtrl
+ * @name hexMapJsApp.controller:MovementCtrl
  * @description
- * # ArcoffireCtrl
+ * # MovementCtrl
  * Controller of the hexMapJsApp
  */
 angular.module('hexMapJsApp')
-  .controller('ArcoffireCtrl', function ($scope, $http) {
+  .controller('MovementCtrl', function ($scope, $http) {
     // Load weapons.json
     $http.get('../data/weapons.json')
       .then(function(res){
         $scope.weapons = res.data;
       });
 
-    var hexagonGrid = new HexagonGrid('ArcOfFireHexCanvas', 50);
+    var hexagonGrid = new HexagonGrid('MovementHexCanvas', 50);
 
     $scope.$watch('selectedWeapons', function(newSelectedWeapons, oldSelectedWeapons){
       var n,i;

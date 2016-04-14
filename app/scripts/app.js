@@ -32,28 +32,18 @@ angular
         controller: 'AboutCtrl',
         controllerAs: 'about'
       })
-      .when('/hexmap', {
-        templateUrl: 'views/hexmap.html',
-        controller: 'HexmapCtrl',
-        controllerAs: 'hexmap'
-      })
       .when('/arcoffire', {
         templateUrl: 'views/arcoffire.html',
         controller: 'ArcoffireCtrl',
         controllerAs: 'arcoffire'
       })
-      .when('/arcoffire', {
-        templateUrl: 'views/arcoffire.html',
-        controller: 'ArcoffireCtrl',
-        controllerAs: 'arcoffire'
-      })
-      .when('/arcoffire', {
-        templateUrl: 'views/arcoffire.html',
-        controller: 'ArcoffireCtrl',
-        controllerAs: 'arcoffire'
+      .when('/movement', {
+        templateUrl: 'views/movement.html',
+        controller: 'MovementCtrl',
+        controllerAs: 'movement'
       })
       .otherwise({
-        redirectTo: '/'
+        redirectTo: '/arcOfFire'
       });
   })
   .config(['localStorageServiceProvider', function(localStorageServiceProvider){

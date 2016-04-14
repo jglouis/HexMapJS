@@ -12,6 +12,7 @@
   "unused": true,
   "globals": {
     "angular": false,
-    "createjs": false
+    "createjs": false,
+    "HexagonGrid":false
   }
 }
