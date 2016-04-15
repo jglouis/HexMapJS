@@ -38,6 +38,8 @@ angular.module('hexMapJsApp')
       hexagonGrid.setHexColor(allowedDestinations[i].u, allowedDestinations[i].v, 'green');
     }
 
+    hexagonGrid.addVector(0, 0, -2, 0);
+
     hexagonGrid.updateStage();
 
     $scope.hexagonGrid = hexagonGrid;

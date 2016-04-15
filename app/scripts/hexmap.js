@@ -56,7 +56,7 @@
 
   };
 
-// Add a sprite
+ // Add a sprite
  HexagonGrid.prototype.addSprite = function (u, v, image){
    var pixel = this.hexToPixel(u,v);
 
@@ -66,6 +66,34 @@
    bitmap.scaleX = 0.4;
    bitmap.scaleY = 0.4;
    this.stage.addChild(bitmap);
+ };
+
+// Draw an vector arrow
+ HexagonGrid.prototype.addVector = function (uStart, vStart, uEnd, vEnd){
+   var pixelStart = this.hexToPixel(uStart, vStart);
+   var pixelEnd = this.hexToPixel(uEnd, vEnd);
+
+   var arrow = new createjs.Shape();
+   arrow.graphics.s('blue').setStrokeStyle(10).mt(pixelStart[0], pixelStart[1]).lt(pixelEnd[0], pixelEnd[1]);
+
+   // Arrow cap
+   var arrowCap = new createjs.Shape();
+   arrowCap.graphics.s('blue').setStrokeStyle(10).mt(-15, +15).lt(0, 0).lt(-15, -15);
+
+   //TODO compute radian
+  //  var dx = pixelEnd[0] - pixelStart[0];
+  //  var dy = pixelEnd[1] - pixelStart[1];
+  //  var dot = pixelStart[0] * pixelEnd[0] + pixelStart[1] * pixelEnd[1];
+  //  var det = pixelStart[0] * pixelEnd[1] - pixelStart[1] * pixelEnd[0];
+  //  var radian = Math.atan2(det , dot);
+   var radian = - Math.PI / 2;
+   var degree = radian / Math.PI * 180;
+   arrowCap.x = pixelEnd[0];
+   arrowCap.y = pixelEnd[1];
+   arrowCap.rotation = degree;
+
+   this.stage.addChild(arrow);
+   this.stage.addChild(arrowCap);
  };
 
  HexagonGrid.prototype.drawHexGrid = function (radius, originX, originY) {
