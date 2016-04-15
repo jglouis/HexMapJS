@@ -51,12 +51,16 @@ angular.module('hexMapJsApp')
           hexagonGrid.addLabel(coordStrength.split(',')[0],coordStrength.split(',')[1],strengthByCoordinates[coordStrength]);
         }
       }
+
+      hexagonGrid.updateStage();
     }, true);
 
     hexagonGrid.drawHexGrid(3, 500, 350);
 
     // Add space ship in the center
     hexagonGrid.addSprite(0, 0, 'images/space_ship_200x200.png');
+
+    hexagonGrid.updateStage();
 
     $scope.hexagonGrid = hexagonGrid;
   });

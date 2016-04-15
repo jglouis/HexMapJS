@@ -30,6 +30,11 @@
 
  }
 
+// Perform a stage update
+ HexagonGrid.prototype.updateStage = function () {
+   this.stage.update();
+ };
+
  // Add or update a text label to the given coordinates
  HexagonGrid.prototype.addLabel = function (u, v, label) {
     // Check if the label already exists, so it doesn't get recreated
@@ -49,8 +54,6 @@
       this.labels[[u,v]].text = label;
     }
 
-    // Update the stage
-    this.stage.update();
   };
 
 // Add a sprite
@@ -63,7 +66,6 @@
    bitmap.scaleX = 0.4;
    bitmap.scaleY = 0.4;
    this.stage.addChild(bitmap);
-   this.stage.update(event);
  };
 
  HexagonGrid.prototype.drawHexGrid = function (radius, originX, originY) {
@@ -90,7 +92,6 @@
    if (typeof u !== 'undefined' && typeof v !== 'undefined'){
      if ([u,v] in this.hexagons){
        this.hexagons[[u,v]].graphics._fill.style = color;
-       this.stage.update();
      }
    }
  };
@@ -132,19 +133,17 @@
        hexagonGrid.selectedCoord = e.target.hexcoord;
      });
      var originalColor;
-     hexagon.on('mouseover', function(e){
+     hexagon.on('mouseover', function(){
        originalColor = fillCommand.style;
        fillCommand.style = 'blue';
-       hexagonGrid.stage.update(e);
+       this.stage.update();
      });
-     hexagon.on('mouseout', function(e){
+     hexagon.on('mouseout', function(){
        fillCommand.style = originalColor;
-       this.stage.update(e);
+       this.stage.update();
      });
 
      this.stage.addChild(hexagon);
-     this.stage.update();
-
      this.hexagons[[u,v]] = hexagon;
 
      return hexagon.graphics;
@@ -154,4 +153,3 @@
  HexagonGrid.prototype.Distance = function(a, b){
    return (Math.abs(a.u - b.u) + Math.abs(a.u + a.v - b.u - b.v) + Math.abs(a.v - b.v)) / 2;
  };
- 
