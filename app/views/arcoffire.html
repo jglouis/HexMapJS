@@ -1,14 +1,28 @@
-<div class="container">
+<div class="container-fluid">
 
-  <canvas id="ArcOfFireHexCanvas" width="1000" height="700" class='img-responsive' style="border: 1px solid black;"></canvas>
+  <div class="row">
 
-  <div
-      isteven-multi-select
-      input-model="weapons"
-      output-model="selectedWeapons"
-      button-label="icon name"
-      item-label="icon name maker"
-      tick-property="ticked"
-  ></div>
+    <div class="col-xl-1">
+    <canvas id="ArcOfFireHexCanvas" width="1000" height="700" class='img-responsive' style="border: 1px solid black;"></canvas>
+    </div>
+
+    <div class="col-xl-2">
+      <h3>Select weapons:</h3>
+    </div>
+
+    <div class="col-xl-2">
+      <div
+          isteven-multi-select
+          input-model="weapons"
+          output-model="selectedWeapons"
+          button-label="icon name"
+          item-label="icon name maker"
+          tick-property="ticked"
+          orientation="horizontal"
+
+      ></div>
+    </div>
+
+  </div>
 
 </div>
