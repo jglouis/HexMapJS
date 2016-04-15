@@ -22,6 +22,6 @@ Run `grunt` for building and `grunt serve` for preview (or grunt `serve:dist` to
 
 Running `grunt test` will run the unit tests with karma.
 
-##Demo
+## Demo
 
 Live demo at https://hexode.xyz/hexmapjs/.
