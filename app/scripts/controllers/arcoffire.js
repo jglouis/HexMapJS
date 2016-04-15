@@ -10,7 +10,7 @@
 angular.module('hexMapJsApp')
   .controller('ArcoffireCtrl', function ($scope, $http) {
     // Load weapons.json
-    $http.get('../data/weapons.json')
+    $http.get('data/weapons.json')
       .then(function(res){
         $scope.weapons = res.data;
       });
