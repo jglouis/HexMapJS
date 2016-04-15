@@ -49,3 +49,9 @@ angular
   .config(['localStorageServiceProvider', function(localStorageServiceProvider){
     localStorageServiceProvider.setPrefix('ls');
   }]);
+
+  // Change navbar active status on click
+  $('.nav.navbar-nav > li').on('click', function() {
+    $('.nav.navbar-nav > li').removeClass('active');
+    $(this).addClass('active');
+  });
