@@ -7,6 +7,24 @@
  * # MovementCtrl
  * Controller of the hexMapJsApp
  */
+
+ var displayAllowedDestinations = function (hexagonGrid, manoeuvrability, foreseenDestination){
+   // Compute allowed destinations
+   var allowedDestinations = [];
+   for (var allowedU = foreseenDestination.u - manoeuvrability; allowedU <= foreseenDestination.u + manoeuvrability; allowedU++) {
+     for (var allowedV = foreseenDestination.v - manoeuvrability; allowedV <= foreseenDestination.v + manoeuvrability; allowedV++) {
+       var allowedDestination = {u: allowedU, v: allowedV};
+       if (hexagonGrid.Distance(foreseenDestination, allowedDestination) > manoeuvrability){
+         continue;
+       }
+       allowedDestinations.push(allowedDestination);
+     }
+   }
+   for (var i = 0; i < allowedDestinations.length; i++){
+     hexagonGrid.setHexColor(allowedDestinations[i].u, allowedDestinations[i].v, 'green');
+   }
+ };
+
 angular.module('hexMapJsApp')
   .controller('MovementCtrl', function ($scope) {
 
@@ -21,22 +39,19 @@ angular.module('hexMapJsApp')
     // var current_position = {u: 0, v: 0};
     var foreseenDestination = {u: -3, v: 0};
     // var orientation = {u: -1, v: 0};
-    var manoeuvrability = 2;
+    $scope.manoeuvrability = 2;
 
-    // Compute allowed destinations
-    var allowedDestinations = [];
-    for (var allowedU = foreseenDestination.u - manoeuvrability; allowedU <= foreseenDestination.u + manoeuvrability; allowedU++) {
-      for (var allowedV = foreseenDestination.v - manoeuvrability; allowedV <= foreseenDestination.v + manoeuvrability; allowedV++) {
-        var allowedDestination = {u: allowedU, v: allowedV};
-        if (hexagonGrid.Distance(foreseenDestination, allowedDestination) > manoeuvrability){
-          continue;
-        }
-        allowedDestinations.push(allowedDestination);
-      }
-    }
-    for (var i = 0; i < allowedDestinations.length; i++){
-      hexagonGrid.setHexColor(allowedDestinations[i].u, allowedDestinations[i].v, 'green');
-    }
+    $scope.$watch('manoeuvrability', function(){
+      console.log('new manoeuvrability:', $scope.manoeuvrability);
+      hexagonGrid.setAllHexColor('grey');
+      displayAllowedDestinations(
+        hexagonGrid,
+        parseInt($scope.manoeuvrability, 0),
+        foreseenDestination);
+      hexagonGrid.updateStage();
+    }, true);
+
+
 
     hexagonGrid.addVector(0, 0, -2, 1);
     hexagonGrid.addVector(0, 0, -2, 0);

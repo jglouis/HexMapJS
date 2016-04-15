@@ -120,6 +120,12 @@
    }
  };
 
+ HexagonGrid.prototype.setAllHexColor = function(color){
+     for (var key in this.hexagons){
+       this.hexagons[key].graphics._fill.style = color;
+   }
+ };
+
  HexagonGrid.prototype.hexToPixel = function(u,v){
    var y = this.radius * Math.sqrt(3) * (u + v/2);
    var x = this.radius * 3/2 * v;
