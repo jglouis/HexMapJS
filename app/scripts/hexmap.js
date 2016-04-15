@@ -80,13 +80,9 @@
    var arrowCap = new createjs.Shape();
    arrowCap.graphics.s('blue').setStrokeStyle(10).mt(-15, +15).lt(0, 0).lt(-15, -15);
 
-   //TODO compute radian
-  //  var dx = pixelEnd[0] - pixelStart[0];
-  //  var dy = pixelEnd[1] - pixelStart[1];
-  //  var dot = pixelStart[0] * pixelEnd[0] + pixelStart[1] * pixelEnd[1];
-  //  var det = pixelStart[0] * pixelEnd[1] - pixelStart[1] * pixelEnd[0];
-  //  var radian = Math.atan2(det , dot);
-   var radian = - Math.PI / 2;
+   var dx = pixelEnd[0] - pixelStart[0];
+   var dy = pixelEnd[1] - pixelStart[1];
+   var radian = Math.atan2(dy, dx) -  Math.atan2(0, 1);
    var degree = radian / Math.PI * 180;
    arrowCap.x = pixelEnd[0];
    arrowCap.y = pixelEnd[1];
