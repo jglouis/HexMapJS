@@ -7,56 +7,82 @@
  * # MovementCtrl
  * Controller of the hexMapJsApp
  */
+
+ var displayAllowedDestinations = function (hexagonGrid, manoeuvrability, maxSpeed, foreseenDestination){
+   hexagonGrid.setAllHexColor('grey');
+   // Compute allowed destinations
+   var allowedDestinations = [];
+   for (var allowedU = foreseenDestination.u - manoeuvrability; allowedU <= foreseenDestination.u + manoeuvrability; allowedU++) {
+     for (var allowedV = foreseenDestination.v - manoeuvrability; allowedV <= foreseenDestination.v + manoeuvrability; allowedV++) {
+       var allowedDestination = {u: allowedU, v: allowedV};
+       // manoeuvrability
+       if (hexagonGrid.Distance(foreseenDestination, allowedDestination) > manoeuvrability){
+         continue;
+       }
+       // max speed
+       if (hexagonGrid.Distance({u:0, v:0}, allowedDestination) > maxSpeed){
+         continue;
+       }
+       allowedDestinations.push(allowedDestination);
+     }
+   }
+   for (var i = 0; i < allowedDestinations.length; i++){
+     hexagonGrid.setHexColor(allowedDestinations[i].u, allowedDestinations[i].v, 'green');
+   }
+ };
+
+ var displayAxes = function(hexagonGrid) {
+   hexagonGrid.addVector('U', 0, 0, 1, 0, 'red');
+   hexagonGrid.addLabel(1, 0, 'U', 'red', 'bold 40px Arial', {x: 20, y: 0});
+   hexagonGrid.addVector('V', 0, 0, 0, 1, 'blue');
+   hexagonGrid.addLabel(0, 1, 'V', 'blue', 'bold 40px Arial', {x: -25, y: -8});
+ };
+
 angular.module('hexMapJsApp')
-  .controller('MovementCtrl', function ($scope, $http) {
-    // Load weapons.json
-    $http.get('../data/weapons.json')
-      .then(function(res){
-        $scope.weapons = res.data;
-      });
+  .controller('MovementCtrl', function ($scope) {
 
+    // Create hexagon grid
     var hexagonGrid = new HexagonGrid('MovementHexCanvas', 50);
-
-    $scope.$watch('selectedWeapons', function(newSelectedWeapons, oldSelectedWeapons){
-      var n,i;
-
-      if (typeof oldSelectedWeapons !== 'undefined'){
-        for (n = 0; n < oldSelectedWeapons.length; n++){
-          for (i = 0; i < oldSelectedWeapons[n].arcOfFire.length; i++){
-            var ocoord = oldSelectedWeapons[n].arcOfFire[i];
-            hexagonGrid.setHexColor(ocoord.u,ocoord.v,'grey');
-
-            // Remove corresponding labels
-            hexagonGrid.addLabel(ocoord.u, ocoord.v, '');
-          }
-        }
-      }
-
-      if (typeof newSelectedWeapons !== 'undefined'){
-        var strengthByCoordinates = {};
-
-        for (n = 0; n < newSelectedWeapons.length; n++){
-          for (i = 0; i < newSelectedWeapons[n].arcOfFire.length; i++){
-            var ncoord = newSelectedWeapons[n].arcOfFire[i];
-            hexagonGrid.setHexColor(ncoord.u,ncoord.v,'red');
-            hexagonGrid.addLabel(ncoord.u,ncoord.v,newSelectedWeapons[n].strength);
-            if([ncoord.u,ncoord.v] in strengthByCoordinates){
-              strengthByCoordinates[[ncoord.u,ncoord.v]] += newSelectedWeapons[n].strength;
-            } else {
-              strengthByCoordinates[[ncoord.u,ncoord.v]] = newSelectedWeapons[n].strength;
-            }
-          }
-        }
-        for (var coordStrength in strengthByCoordinates){
-          hexagonGrid.addLabel(coordStrength.split(',')[0],coordStrength.split(',')[1],strengthByCoordinates[coordStrength]);
-        }
-      }
-    }, true);
-
-    hexagonGrid.drawHexGrid(6, 300, 300);
+    hexagonGrid.drawHexGrid(10, 500, 600);
 
     // Add space ship in the center
     hexagonGrid.addSprite(0, 0, 'images/space_ship_200x200.png');
+
+    // Hardcoded ship characteristics
+    // var current_position = {u: 0, v: 0};
+    // var orientation = {u: -1, v: 0};
+    $scope.maxSpeed = 3;
+    $scope.manoeuvrability = 2;
+    $scope.movementVector = {u: 0, v: -3};
+
+    $scope.$watch('[movementVector, maxSpeed, manoeuvrability]', function(){
+      console.log('New movement vector:', $scope.movementVector.u, $scope.movementVector.v);
+      hexagonGrid.addVector(
+        'movement',
+        0,
+        0,
+        $scope.movementVector.u,
+        $scope.movementVector.v,
+        'black',
+        function(newVector){
+          $scope.movementVector = newVector;
+          displayAllowedDestinations(
+            hexagonGrid,
+            parseInt($scope.manoeuvrability, 0),
+            parseInt($scope.maxSpeed, 0),
+            $scope.movementVector);
+        });
+      displayAllowedDestinations(
+        hexagonGrid,
+        parseInt($scope.manoeuvrability, 0),
+        parseInt($scope.maxSpeed, 0),
+        $scope.movementVector);
+      hexagonGrid.updateStage();
+    }, true);
+
+    displayAxes(hexagonGrid);
+
+    hexagonGrid.updateStage();
 
     $scope.hexagonGrid = hexagonGrid;
   });

@@ -13,6 +13,7 @@
   "globals": {
     "angular": false,
     "createjs": false,
-    "HexagonGrid":false
+    "HexagonGrid":false,
+    "$":false
   }
 }
