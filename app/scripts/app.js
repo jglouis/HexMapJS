@@ -23,9 +23,9 @@ angular
   .config(function ($routeProvider) {
     $routeProvider
       .when('/', {
-        templateUrl: 'views/arcoffire.html',
-        controller: 'ArcoffireCtrl',
-        controllerAs: 'arcoffire'
+        templateUrl: 'views/main.html',
+        controller: 'MainCtrl',
+        controllerAs: 'main'
       })
       .when('/about', {
         templateUrl: 'views/about.html',
@@ -43,7 +43,7 @@ angular
         controllerAs: 'movement'
       })
       .otherwise({
-        redirectTo: '/arcOfFire'
+        redirectTo: '/'
       });
   })
   .config(['localStorageServiceProvider', function(localStorageServiceProvider){

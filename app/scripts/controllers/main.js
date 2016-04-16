@@ -8,21 +8,6 @@
  * Controller of the learningAngularJsApp
  */
  angular.module('hexMapJsApp')
-   .controller('MainCtrl', function ($scope, localStorageService) {
+   .controller('MainCtrl', function () {
 
-     var todosInStore = localStorageService.get('todos');
-
-     $scope.todos = todosInStore || [];
-
-     $scope.$watch('todos', function(){
-       localStorageService.set('todos', $scope.todos);
-     }, true);
-
-     $scope.addTodo = function () {
-       $scope.todos.push({name: $scope.todoName});
-       $scope.todoName = '';
-     };
-     $scope.removeTodo = function (index) {
-      $scope.todos.splice(index, 1);
-    };
    });
