@@ -8,14 +8,19 @@
  * Controller of the hexMapJsApp
  */
 
- var displayAllowedDestinations = function (hexagonGrid, manoeuvrability, foreseenDestination){
+ var displayAllowedDestinations = function (hexagonGrid, manoeuvrability, maxSpeed, foreseenDestination){
    hexagonGrid.setAllHexColor('grey');
    // Compute allowed destinations
    var allowedDestinations = [];
    for (var allowedU = foreseenDestination.u - manoeuvrability; allowedU <= foreseenDestination.u + manoeuvrability; allowedU++) {
      for (var allowedV = foreseenDestination.v - manoeuvrability; allowedV <= foreseenDestination.v + manoeuvrability; allowedV++) {
        var allowedDestination = {u: allowedU, v: allowedV};
+       // manoeuvrability
        if (hexagonGrid.Distance(foreseenDestination, allowedDestination) > manoeuvrability){
+         continue;
+       }
+       // max speed
+       if (hexagonGrid.Distance({u:0, v:0}, allowedDestination) > maxSpeed){
          continue;
        }
        allowedDestinations.push(allowedDestination);
@@ -46,19 +51,11 @@ angular.module('hexMapJsApp')
     // Hardcoded ship characteristics
     // var current_position = {u: 0, v: 0};
     // var orientation = {u: -1, v: 0};
+    $scope.maxSpeed = 3;
     $scope.manoeuvrability = 2;
     $scope.movementVector = {u: 0, v: -3};
 
-    $scope.$watch('manoeuvrability', function(){
-      console.log('New manoeuvrability:', $scope.manoeuvrability);
-      displayAllowedDestinations(
-        hexagonGrid,
-        parseInt($scope.manoeuvrability, 0),
-        $scope.movementVector);
-      hexagonGrid.updateStage();
-    }, true);
-
-    $scope.$watch('movementVector', function(){
+    $scope.$watch('[movementVector, maxSpeed, manoeuvrability]', function(){
       console.log('New movement vector:', $scope.movementVector.u, $scope.movementVector.v);
       hexagonGrid.addVector(
         'movement',
@@ -72,11 +69,13 @@ angular.module('hexMapJsApp')
           displayAllowedDestinations(
             hexagonGrid,
             parseInt($scope.manoeuvrability, 0),
+            parseInt($scope.maxSpeed, 0),
             $scope.movementVector);
         });
       displayAllowedDestinations(
         hexagonGrid,
         parseInt($scope.manoeuvrability, 0),
+        parseInt($scope.maxSpeed, 0),
         $scope.movementVector);
       hexagonGrid.updateStage();
     }, true);
