@@ -73,7 +73,7 @@
  };
 
 // Draw an vector arrow
- HexagonGrid.prototype.addVector = function (id, uStart, vStart, uEnd, vEnd){
+ HexagonGrid.prototype.addVector = function (id, uStart, vStart, uEnd, vEnd, color){
    // If the vector id exists, remove the graphics
    if(id in this.vectorsById){
      this.stage.removeChild(this.vectorsById[id].arrow);
@@ -84,11 +84,11 @@
    var pixelEnd = this.hexToPixel(uEnd, vEnd);
 
    var arrow = new createjs.Shape();
-   arrow.graphics.s('blue').setStrokeStyle(10).mt(pixelStart[0], pixelStart[1]).lt(pixelEnd[0], pixelEnd[1]);
+   arrow.graphics.s(color).setStrokeStyle(10).mt(pixelStart[0], pixelStart[1]).lt(pixelEnd[0], pixelEnd[1]);
 
    // Arrow cap
    var arrowCap = new createjs.Shape();
-   arrowCap.graphics.s('blue').setStrokeStyle(10).mt(-15, +15).lt(0, 0).lt(-15, -15);
+   arrowCap.graphics.s(color).setStrokeStyle(10).mt(-15, +15).lt(0, 0).lt(-15, -15);
 
    var dx = pixelEnd[0] - pixelStart[0];
    var dy = pixelEnd[1] - pixelStart[1];

@@ -9,6 +9,7 @@
  */
 
  var displayAllowedDestinations = function (hexagonGrid, manoeuvrability, foreseenDestination){
+   hexagonGrid.setAllHexColor('grey');
    // Compute allowed destinations
    var allowedDestinations = [];
    for (var allowedU = foreseenDestination.u - manoeuvrability; allowedU <= foreseenDestination.u + manoeuvrability; allowedU++) {
@@ -37,27 +38,31 @@ angular.module('hexMapJsApp')
 
     // Hardcoded ship characteristics
     // var current_position = {u: 0, v: 0};
-    var foreseenDestination = {u: 0, v: 3};
     // var orientation = {u: -1, v: 0};
     $scope.manoeuvrability = 2;
     $scope.movementVector = {u: 0, v: 3};
 
     $scope.$watch('manoeuvrability', function(){
       console.log('New manoeuvrability:', $scope.manoeuvrability);
-      hexagonGrid.setAllHexColor('grey');
       displayAllowedDestinations(
         hexagonGrid,
         parseInt($scope.manoeuvrability, 0),
-        foreseenDestination);
+        $scope.movementVector);
       hexagonGrid.updateStage();
     }, true);
 
     $scope.$watch('movementVector', function(){
       console.log('New movement vector:', $scope.movementVector.u, $scope.movementVector.v);
-      hexagonGrid.addVector('movement', 0, 0, $scope.movementVector.u, $scope.movementVector.v);
+      hexagonGrid.addVector('movement', 0, 0, $scope.movementVector.u, $scope.movementVector.v, 'black');
+      displayAllowedDestinations(
+        hexagonGrid,
+        parseInt($scope.manoeuvrability, 0),
+        $scope.movementVector);
       hexagonGrid.updateStage();
     }, true);
 
+    hexagonGrid.addVector('U', 0, 0, 2, 0, 'red');
+    hexagonGrid.addVector('V', 0, 0, 0, 2, 'blue');
     hexagonGrid.updateStage();
 
     $scope.hexagonGrid = hexagonGrid;
