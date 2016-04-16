@@ -40,7 +40,7 @@ angular.module('hexMapJsApp')
     // var current_position = {u: 0, v: 0};
     // var orientation = {u: -1, v: 0};
     $scope.manoeuvrability = 2;
-    $scope.movementVector = {u: 0, v: 3};
+    $scope.movementVector = {u: 0, v: -3};
 
     $scope.$watch('manoeuvrability', function(){
       console.log('New manoeuvrability:', $scope.manoeuvrability);
@@ -61,8 +61,8 @@ angular.module('hexMapJsApp')
       hexagonGrid.updateStage();
     }, true);
 
-    hexagonGrid.addVector('U', 0, 0, 2, 0, 'red');
-    hexagonGrid.addVector('V', 0, 0, 0, 2, 'blue');
+    hexagonGrid.addVector('U', 0, 0, 1, 0, 'red');
+    hexagonGrid.addVector('V', 0, 0, 0, 1, 'blue');
     hexagonGrid.updateStage();
 
     $scope.hexagonGrid = hexagonGrid;

@@ -139,7 +139,7 @@
  };
 
  HexagonGrid.prototype.hexToPixel = function(u,v){
-   var y = -this.radius * Math.sqrt(3) * (v + u/2);
+   var y = this.radius * Math.sqrt(3) * (v + u/2);
    var x = this.radius * 3/2 * u;
 
    x += this.canvasOriginX;
