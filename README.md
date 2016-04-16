@@ -11,12 +11,15 @@ version 0.15.1.
 
 * Git
 * NodeJS
-* Bower
 
 ## Build & development
 
-Cd to the project directory, run `npm install` and `bower install`.
-Run `grunt` for building and `grunt serve` for preview (or grunt `serve:dist` to see the distribution version).
+Cd to the project directory, run the following commands:
+* `npm install`
+* `npm install -g bower grunt-cli`
+* `bower install`
+
+Run `grunt` for building and `grunt serve` for preview (or `grunt serve:dist` to see the distribution version).
 
 ## Testing
 
