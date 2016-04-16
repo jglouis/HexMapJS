@@ -1,5 +1,5 @@
 {
-  "name": "HexMapJS",
+  "name": "hex-map-js",
   "version": "0.0.0",
   "dependencies": {
     "angular": "^1.4.0",
@@ -9,18 +9,18 @@
     "angular-resource": "^1.4.0",
     "angular-route": "^1.4.0",
     "angular-sanitize": "^1.4.0",
-    "angular-touch": "^1.4.0",
     "angular-ui-sortable": "^0.13.4",
     "jquery-ui": "^1.11.4",
     "angular-local-storage": "^0.2.3",
     "EaselJS": "^0.8.2",
-    "isteven-angular-multiselect": "angular-multi-select#^4.0.0"
+    "isteven-angular-multiselect": "angular-multi-select#^4.0.0",
+    "angular-touch": "^1.4.0"
   },
   "devDependencies": {
     "angular-mocks": "^1.4.0"
   },
   "appPath": "app",
-  "moduleName": "hexMapJS",
+  "moduleName": "hexMapJsApp",
   "overrides": {
     "bootstrap": {
       "main": [

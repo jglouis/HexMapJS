@@ -2,14 +2,14 @@
 
 /**
  * @ngdoc overview
- * @name learningAngularJsApp
+ * @name hexMapJS
  * @description
- * # learningAngularJsApp
+ * # hexMapJS
  *
  * Main module of the application.
  */
 angular
-  .module('hexMapApp', [
+  .module('hexMapJsApp', [
     'ngAnimate',
     'ngCookies',
     'ngResource',
@@ -23,24 +23,35 @@ angular
   .config(function ($routeProvider) {
     $routeProvider
       .when('/', {
-        templateUrl: 'views/hexmap.html',
-        controller: 'HexmapCtrl',
-        controllerAs: 'hexmap'
+        templateUrl: 'views/main.html',
+        controller: 'MainCtrl',
+        controllerAs: 'main'
       })
       .when('/about', {
         templateUrl: 'views/about.html',
         controller: 'AboutCtrl',
         controllerAs: 'about'
       })
-      .when('/hexmap', {
-        templateUrl: 'views/hexmap.html',
-        controller: 'HexmapCtrl',
-        controllerAs: 'hexmap'
+      .when('/arcoffire', {
+        templateUrl: 'views/arcoffire.html',
+        controller: 'ArcoffireCtrl',
+        controllerAs: 'arcoffire'
+      })
+      .when('/movement', {
+        templateUrl: 'views/movement.html',
+        controller: 'MovementCtrl',
+        controllerAs: 'movement'
       })
       .otherwise({
-        redirectTo: '/hexmap'
+        redirectTo: '/'
       });
   })
   .config(['localStorageServiceProvider', function(localStorageServiceProvider){
     localStorageServiceProvider.setPrefix('ls');
   }]);
+
+  // Change navbar active status on click
+  $('.nav.navbar-nav > li').on('click', function() {
+    $('.nav.navbar-nav > li').removeClass('active');
+    $(this).addClass('active');
+  });

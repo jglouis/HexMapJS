@@ -1,17 +1,17 @@
 'use strict';
 
-describe('Controller: HexmapCtrl', function () {
+describe('Controller: MovementCtrl', function () {
 
   // load the controller's module
-  beforeEach(module('hexMapApp'));
+  beforeEach(module('hexMapJsApp'));
 
-  var HexmapCtrl,
+  var MovementCtrl,
     scope;
 
   // Initialize the controller and a mock scope
   beforeEach(inject(function ($controller, $rootScope) {
     scope = $rootScope.$new();
-    HexmapCtrl = $controller('HexmapCtrl', {
+    MovementCtrl = $controller('MovementCtrl', {
       $scope: scope
       // place here mocked dependencies
     });

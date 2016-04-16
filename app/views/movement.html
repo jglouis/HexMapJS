@@ -1,0 +1,62 @@
+<div class="container">
+
+  <div class="row">
+    <div class="col-xl-1">
+      <canvas id="MovementHexCanvas" width="1000" height="700" class='img-responsive' style="border: 1px solid black;"></canvas>
+    </div>
+  </div>
+
+  <div class="row">
+
+    <div class="col-sm-2">
+      <label>Manoeuvrability:</label>
+      <input type="number" min="0" max="3" ng-model="manoeuvrability" placeholder="Manoeuvrability" >
+    </div>
+
+    <div class="col-sm-2">
+      <label>Max speed:</label>
+      <input type="number" min="0" max="3" ng-model="maxSpeed" placeholder="Max speed" >
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-xl-2">
+      <div class="panel panel-default">
+        <div class="panel-heading">Select Weapons</div>
+        <div class="panel-body">
+          <p>The green hexes represent the allowed destinations for the space
+          ship.</p>
+
+          <p>The black arow is called "movement vector", it represents the inertia
+          of the space ship. In space, an object tends to keep its velocity if
+          no force is applied on it. I wanted to represent this idea in Hexode.
+          The black arrows points to the default destination if no move order is given
+          to the ship this turn.</p>
+
+          <p>Movement is restricted by two factors, beside the movement vector.</p>
+          <li>ship's manoeuvrability</li>
+          <li>ship's max movement speed</li>
+          <br>
+          <p>To know if a hexagon is reachable (green), the hexagon must satisfies two
+          conditions:</p>
+          <li>distance between the destination and the top of the movement
+          vector must be less or equal than ship's manoeuvrability</li>
+          <li>distance between the ship's current position and the base of the
+          movement vector must be less or equal than ship's max movement speed</li>
+          <br>
+          <p>Next turns, once the ship has moved to its destination. The
+          movement vector is updated according to its new trajectory.</p>
+          <p>Try to change manoeuvrability and max speed (they are both capped to
+          3, as it is a hard limit for these characteristics) and to drag and
+          drop the tip of the movement vector to get a sense of the movement
+          system.</p>
+          <p>Ships going fast will be limited by their manoeuvrability, and
+          vice versa. In some extreme cases (try with a big enough movement
+          vector or low characteristics), you may notice than there are no valid
+          destinations. I plan to have this situation happening in the game. It
+          will represent a ship out of control.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

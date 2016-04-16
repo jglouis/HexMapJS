@@ -1,17 +1,17 @@
 'use strict';
 
-describe('Controller: AboutCtrl', function () {
+describe('Controller: ArcoffireCtrl', function () {
 
   // load the controller's module
   beforeEach(module('hexMapJsApp'));
 
-  var AboutCtrl,
+  var ArcoffireCtrl,
     scope;
 
   // Initialize the controller and a mock scope
   beforeEach(inject(function ($controller, $rootScope) {
     scope = $rootScope.$new();
-    AboutCtrl = $controller('AboutCtrl', {
+    ArcoffireCtrl = $controller('ArcoffireCtrl', {
       $scope: scope
       // place here mocked dependencies
     });
