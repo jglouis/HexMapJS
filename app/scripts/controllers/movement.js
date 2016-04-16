@@ -40,9 +40,10 @@ angular.module('hexMapJsApp')
     var foreseenDestination = {u: -3, v: 0};
     // var orientation = {u: -1, v: 0};
     $scope.manoeuvrability = 2;
+    $scope.movementVector = {u: -3, v: 0};
 
     $scope.$watch('manoeuvrability', function(){
-      console.log('new manoeuvrability:', $scope.manoeuvrability);
+      console.log('New manoeuvrability:', $scope.manoeuvrability);
       hexagonGrid.setAllHexColor('grey');
       displayAllowedDestinations(
         hexagonGrid,
@@ -51,12 +52,11 @@ angular.module('hexMapJsApp')
       hexagonGrid.updateStage();
     }, true);
 
-
-
-    hexagonGrid.addVector(0, 0, -2, 1);
-    hexagonGrid.addVector(0, 0, -2, 0);
-    hexagonGrid.addVector(0, 0, -3, -1);
-    hexagonGrid.addVector(0, 0, 1, -1);
+    $scope.$watch('movementVector', function(){
+      console.log('New movement vector:', $scope.movementVector.u, $scope.movementVector.v);
+      hexagonGrid.addVector('movement', 0, 0, $scope.movementVector.u, $scope.movementVector.v);
+      hexagonGrid.updateStage();
+    }, true);
 
     hexagonGrid.updateStage();
 

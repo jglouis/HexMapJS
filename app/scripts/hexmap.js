@@ -21,6 +21,9 @@
      // All the labels, indexed by hexagonal coordinates [u,v]
      this.labels = {};
 
+     // All vectors, indexed by id (id is unique)
+     this.vectorsById = {};
+
      this.canvasOriginX = 0;
      this.canvasOriginY = 0;
 
@@ -50,6 +53,7 @@
 
       // Add the text label to the stage
       this.stage.addChild(text);
+
     } else {
       this.labels[[u,v]].text = label;
     }
@@ -69,7 +73,13 @@
  };
 
 // Draw an vector arrow
- HexagonGrid.prototype.addVector = function (uStart, vStart, uEnd, vEnd){
+ HexagonGrid.prototype.addVector = function (id, uStart, vStart, uEnd, vEnd){
+   // If the vector id exists, remove the graphics
+   if(id in this.vectorsById){
+     this.stage.removeChild(this.vectorsById[id].arrow);
+     this.stage.removeChild(this.vectorsById[id].arrowCap);
+   }
+
    var pixelStart = this.hexToPixel(uStart, vStart);
    var pixelEnd = this.hexToPixel(uEnd, vEnd);
 
@@ -90,6 +100,8 @@
 
    this.stage.addChild(arrow);
    this.stage.addChild(arrowCap);
+
+   this.vectorsById[id] = {arrow: arrow, arrowCap: arrowCap};
  };
 
  HexagonGrid.prototype.drawHexGrid = function (radius, originX, originY) {
