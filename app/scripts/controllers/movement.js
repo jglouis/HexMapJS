@@ -60,7 +60,20 @@ angular.module('hexMapJsApp')
 
     $scope.$watch('movementVector', function(){
       console.log('New movement vector:', $scope.movementVector.u, $scope.movementVector.v);
-      hexagonGrid.addVector('movement', 0, 0, $scope.movementVector.u, $scope.movementVector.v, 'black');
+      hexagonGrid.addVector(
+        'movement',
+        0,
+        0,
+        $scope.movementVector.u,
+        $scope.movementVector.v,
+        'black',
+        function(newVector){
+          $scope.movementVector = newVector;
+          displayAllowedDestinations(
+            hexagonGrid,
+            parseInt($scope.manoeuvrability, 0),
+            $scope.movementVector);
+        });
       displayAllowedDestinations(
         hexagonGrid,
         parseInt($scope.manoeuvrability, 0),

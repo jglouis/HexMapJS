@@ -76,33 +76,49 @@
  };
 
 // Draw an vector arrow
- HexagonGrid.prototype.addVector = function (id, uStart, vStart, uEnd, vEnd, color){
-   // If the vector id exists, remove the graphics
-   if(id in this.vectorsById){
-     this.stage.removeChild(this.vectorsById[id].arrow);
-     this.stage.removeChild(this.vectorsById[id].arrowCap);
-   }
+ HexagonGrid.prototype.addVector = function (id, uStart, vStart, uEnd, vEnd, color, onMove){
+   var arrow, arrowCap;
 
    var pixelStart = this.hexToPixel(uStart, vStart);
    var pixelEnd = this.hexToPixel(uEnd, vEnd);
-
-   var arrow = new createjs.Shape();
-   arrow.graphics.s(color).setStrokeStyle(10).mt(pixelStart[0], pixelStart[1]).lt(pixelEnd[0], pixelEnd[1]);
-
-   // Arrow cap
-   var arrowCap = new createjs.Shape();
-   arrowCap.graphics.s(color).setStrokeStyle(10).mt(-15, +15).lt(0, 0).lt(-15, -15);
 
    var dx = pixelEnd[0] - pixelStart[0];
    var dy = pixelEnd[1] - pixelStart[1];
    var radian = Math.atan2(dy, dx) -  Math.atan2(0, 1);
    var degree = radian / Math.PI * 180;
+
+   // If the vector id exists, clear the graphics
+   if(id in this.vectorsById){
+    arrow = this.vectorsById[id].arrow;
+    arrow.graphics.clear();
+    arrowCap = this.vectorsById[id].arrowCap;
+    arrowCap.graphics.clear();
+  } else {
+    arrow = new createjs.Shape();
+    // Arrow cap
+    arrowCap = new createjs.Shape();
+    // Add mouse event for drag and drop
+    var hexagonGrid = this;
+    arrowCap.on('pressmove', function(e) {
+      var uv = hexagonGrid.pixelToHex(e.stageX, e.stageY);
+      // console.log('Move vector', id, 'to', uv);
+      hexagonGrid.addVector(id, uStart, vStart, uv[0], uv[1], color);
+      hexagonGrid.stage.update();
+
+      if (typeof onMove !== 'undefined'){
+        onMove({u: uv[0], v: uv[1]});
+      }
+    });
+
+    this.stage.addChild(arrow);
+    this.stage.addChild(arrowCap);
+  }
+
+   arrow.graphics.s(color).setStrokeStyle(10).mt(pixelStart[0], pixelStart[1]).lt(pixelEnd[0], pixelEnd[1]);
+   arrowCap.graphics.s(color).setStrokeStyle(10).mt(-15, +15).lt(0, 0).lt(-15, -15);
    arrowCap.x = pixelEnd[0];
    arrowCap.y = pixelEnd[1];
    arrowCap.rotation = degree;
-
-   this.stage.addChild(arrow);
-   this.stage.addChild(arrowCap);
 
    this.vectorsById[id] = {arrow: arrow, arrowCap: arrowCap};
  };
