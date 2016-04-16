@@ -1,25 +1,17 @@
 <div class="container">
-  <h2>My todos</h2>
+  <h1>What is this website about?</h1>
+    <p>Welcome to HexMapJS, this website is part of the Hexode project. See About page for all the links.</p>
 
-  <!-- Todos input -->
-  <form role="form" ng-submit="addTodo()">
-    <div class="row">
-      <div class="input-group">
-        <input type="text" ng-model="todoName" placeholder="What needs to be done?" class="form-control">
-        <span class="input-group-btn">
-          <input type="submit" class="btn btn-primary" value="Add">
-        </span>
-      </div>
-    </div>
-  </form>
+    <p>HexMapJS is a subproject of Hexode. It serves two purposes:</p>
+    <li>Build a generalist and minimalistic tool for handling hexagonal board
+      games in JavaScript. This is what hexmap.js is for.</li>
+    <li>Provide tools for testing and showcasing gameplay ideas. Hexagonal board
+       are hard to draw by hand. So it will be a great convenience for me as an
+       extension of my blog.</li>
+    <br>
+    <p>This subsite will evolve and its content will be updated as work goes on
+    on the main project.<p>
+       <br>
+    The dev.
 
-  <!-- Todos list -->
-  <div ui-sortable ng-model="todos">
-    <p class="input-group" ng-repeat="todo in todos" style="padding:5px 10px; cursor: move;">
-      <input type="text" ng-model="todo.name" class="form-control">
-      <span class="input-group-btn">
-        <button class="btn btn-danger" ng-click="removeTodo($index)" aria-label="Remove">X</button>
-      </span>
-    </p>
-  </div>
 </div>
