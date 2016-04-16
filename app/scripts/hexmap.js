@@ -39,13 +39,16 @@
  };
 
  // Add or update a text label to the given coordinates
- HexagonGrid.prototype.addLabel = function (u, v, label) {
+ HexagonGrid.prototype.addLabel = function (u, v, label, color, font, offset) {
+    if (typeof color === 'undefined') { color = 'white'; }
+    if (typeof font === 'undefined') { font = '60px Arial'; }
+    if (typeof offset === 'undefined') { offset = {x: 0, y: 0}; }
     // Check if the label already exists, so it doesn't get recreated
     if(!([u,v] in this.labels)){
       var pixel = this.hexToPixel(u,v);
-      var text = new createjs.Text(label, '60px Arial', '#ffffff');
-      text.x = pixel[0] - 15;
-      text.y = pixel[1] + 15;
+      var text = new createjs.Text(label, font, color);
+      text.x = pixel[0] - 15 + offset.x;
+      text.y = pixel[1] + 15 + offset.y;
       text.textBaseline = 'alphabetic';
 
       // Add the text label to dictionary

@@ -26,6 +26,13 @@
    }
  };
 
+ var displayAxes = function(hexagonGrid) {
+   hexagonGrid.addVector('U', 0, 0, 1, 0, 'red');
+   hexagonGrid.addLabel(1, 0, 'U', 'red', 'bold 40px Arial', {x: 20, y: 0});
+   hexagonGrid.addVector('V', 0, 0, 0, 1, 'blue');
+   hexagonGrid.addLabel(0, 1, 'V', 'blue', 'bold 40px Arial', {x: -25, y: -8});
+ };
+
 angular.module('hexMapJsApp')
   .controller('MovementCtrl', function ($scope) {
 
@@ -61,8 +68,8 @@ angular.module('hexMapJsApp')
       hexagonGrid.updateStage();
     }, true);
 
-    hexagonGrid.addVector('U', 0, 0, 1, 0, 'red');
-    hexagonGrid.addVector('V', 0, 0, 0, 1, 'blue');
+    displayAxes(hexagonGrid);
+
     hexagonGrid.updateStage();
 
     $scope.hexagonGrid = hexagonGrid;
