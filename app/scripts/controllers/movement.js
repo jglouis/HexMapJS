@@ -37,10 +37,10 @@ angular.module('hexMapJsApp')
 
     // Hardcoded ship characteristics
     // var current_position = {u: 0, v: 0};
-    var foreseenDestination = {u: 0, v: -3};
+    var foreseenDestination = {u: 0, v: 3};
     // var orientation = {u: -1, v: 0};
     $scope.manoeuvrability = 2;
-    $scope.movementVector = {u: 0, v: -3};
+    $scope.movementVector = {u: 0, v: 3};
 
     $scope.$watch('manoeuvrability', function(){
       console.log('New manoeuvrability:', $scope.manoeuvrability);
