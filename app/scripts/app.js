@@ -10,14 +10,7 @@
  */
 angular
   .module('hexMapJsApp', [
-    'ngAnimate',
-    'ngCookies',
-    'ngResource',
     'ngRoute',
-    'ngSanitize',
-    'ngTouch',
-    'ui.sortable',
-    'LocalStorageModule',
     'isteven-multi-select'
   ])
   .config(function ($routeProvider) {
@@ -45,10 +38,7 @@ angular
       .otherwise({
         redirectTo: '/'
       });
-  })
-  .config(['localStorageServiceProvider', function(localStorageServiceProvider){
-    localStorageServiceProvider.setPrefix('ls');
-  }]);
+  });
 
   // Change navbar active status on click
   $('.nav.navbar-nav > li').on('click', function() {
