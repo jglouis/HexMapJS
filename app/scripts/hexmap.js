@@ -67,6 +67,12 @@
  HexagonGrid.prototype.addSprite = function (u, v, image){
    var pixel = this.hexToPixel(u,v);
 
+   // peload image file and update stage once loaded
+   var handleFileLoad = function(){this.updateStage();};
+   var queue = new createjs.LoadQueue(true);
+   queue.on('fileload', handleFileLoad, this);
+   queue.loadFile(image);
+
    var bitmap = new createjs.Bitmap(image);
    bitmap.x = pixel[0] - 40;
    bitmap.y = pixel[1] - 40;

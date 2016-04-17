@@ -29,6 +29,7 @@ module.exports = function(config) {
       'bower_components/jquery-ui/jquery-ui.js',
       'bower_components/EaselJS/lib/easeljs-0.8.2.combined.js',
       'bower_components/isteven-angular-multiselect/isteven-multi-select.js',
+      'bower_components/PreloadJS/lib/preloadjs-0.6.2.combined.js',
       'bower_components/angular-mocks/angular-mocks.js',
       // endbower
       "app/scripts/**/*.js",
