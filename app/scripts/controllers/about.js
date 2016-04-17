@@ -9,9 +9,7 @@
  */
 angular.module('hexMapJsApp')
   .controller('AboutCtrl', function () {
-    this.awesomeThings = [
-      'HTML5 Boilerplate',
-      'AngularJS',
-      'Karma'
-    ];
+    // Set active Tab
+    $('.nav.navbar-nav > li').removeClass('active');
+    $('#aboutTab').addClass('active');
   });
