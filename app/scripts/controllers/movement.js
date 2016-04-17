@@ -40,6 +40,9 @@
 
 angular.module('hexMapJsApp')
   .controller('MovementCtrl', function ($scope) {
+    // Set active Tab
+    $('.nav.navbar-nav > li').removeClass('active');
+    $('#movementTab').addClass('active');
 
     // Create hexagon grid
     var hexagonGrid = new HexagonGrid('MovementHexCanvas', 50);

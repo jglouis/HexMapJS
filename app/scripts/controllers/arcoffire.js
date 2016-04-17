@@ -9,6 +9,10 @@
  */
 angular.module('hexMapJsApp')
   .controller('ArcoffireCtrl', function ($scope, $http) {
+    // Set active Tab
+    $('.nav.navbar-nav > li').removeClass('active');
+    $('#arcoffireTab').addClass('active');
+
     // Load weapons.json
     $http.get('data/weapons.json')
       .then(function(res){
