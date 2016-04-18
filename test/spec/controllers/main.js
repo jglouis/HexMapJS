@@ -24,9 +24,9 @@ describe('Controller: MainCtrl', function () {
   }));
 
   it('should compute distance between hexes', function () {
-    expect(hexagonGrid.Distance({u: 0, v:0},{u: 0, v:0})).toBe(0);
-    expect(hexagonGrid.Distance({u: 0, v:0},{u: 0, v: 1})).toBe(1);
-    expect(hexagonGrid.Distance({u: 3, v:0},{u: -3, v: 2})).toBe(6);
+    expect(hexagonGrid.distance({u: 0, v:0},{u: 0, v:0})).toBe(0);
+    expect(hexagonGrid.distance({u: 0, v:0},{u: 0, v: 1})).toBe(1);
+    expect(hexagonGrid.distance({u: 3, v:0},{u: -3, v: 2})).toBe(6);
   });
 
   it('should verify hex to pixel and pixel to hex to be inverse', function () {
@@ -54,5 +54,38 @@ describe('Controller: MainCtrl', function () {
     hexagonGrid.addVector('test1', 0, 1, 2, 3);
     hexagonGrid.addVector('test2', 3, 2, 1, 0);
     expect(Object.keys(hexagonGrid.vectorsById).length).toBe(2);
+  });
+
+  it('should test the angle between two hexagonal vectors', function() {
+    var tests = [
+      {
+        v1:{u: 0, v: 1},
+        v2:{u: 0, v: 1},
+        expected: 0
+      },
+      {
+        v1:{u: 1, v: 0},
+        v2:{u: 0, v: 1},
+        expected: 60
+      },
+      {
+        v1:{u: 2, v: 0},
+        v2:{u: 0, v: 3},
+        expected: 60
+      },
+      {
+        v1:{u: 2, v: 0},
+        v2:{u: 0, v: -1},
+        expected: -120
+      }
+    ];
+    for(var i = 0; i < tests.length; i++){
+      var v1 = tests[i].v1;
+      var v2 = tests[i].v2;
+      var expected = tests[i].expected;
+      var computed = hexagonGrid.angle(v1.u, v1.v, v2.u, v2.v);
+      expect(computed).toBe(expected);
+      expect(computed).toBe(expected);
+    }
   });
 });

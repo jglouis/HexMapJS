@@ -24,6 +24,9 @@
      // All vectors, indexed by id (id is unique)
      this.vectorsById = {};
 
+     // All sprites, indexed by id (id is unique)
+     this.spritesById = {};
+
      this.canvasOriginX = 0;
      this.canvasOriginY = 0;
 
@@ -64,21 +67,36 @@
   };
 
  // Add a sprite
- HexagonGrid.prototype.addSprite = function (u, v, image){
+ HexagonGrid.prototype.addSprite = function (id, u, v, image, orientation){
+   var bitmap;
    var pixel = this.hexToPixel(u,v);
 
-   // peload image file and update stage once loaded
-   var handleFileLoad = function(){this.updateStage();};
-   var queue = new createjs.LoadQueue(true);
-   queue.on('fileload', handleFileLoad, this);
-   queue.loadFile(image);
+   // Check if sprite id is alredy used
+   if(id in this.spritesById){
+     bitmap = this.spritesById[id];
+     bitmap.x = pixel[0];
+     bitmap.y = pixel[1];
+   } else {
+     // peload image file and update stage once loaded
+     var handleFileLoad = function(){this.updateStage();};
+     var queue = new createjs.LoadQueue(true);
+     queue.on('fileload', handleFileLoad, this);
+     queue.loadFile(image);
 
-   var bitmap = new createjs.Bitmap(image);
-   bitmap.x = pixel[0] - 40;
-   bitmap.y = pixel[1] - 40;
-   bitmap.scaleX = 0.4;
-   bitmap.scaleY = 0.4;
-   this.stage.addChild(bitmap);
+     bitmap = new createjs.Bitmap(image);
+     bitmap.regX = 100;
+     bitmap.regY = 100;
+     bitmap.x = pixel[0];
+     bitmap.y = pixel[1];
+     bitmap.scaleX = bitmap.scaleY = 0.4;
+
+     this.spritesById[id] = bitmap;
+     this.stage.addChild(bitmap);
+   }
+   // Set orientation
+    if(typeof orientation !== 'undefined'){
+      bitmap.rotation = orientation;
+    }
  };
 
 // Draw an vector arrow
@@ -87,11 +105,7 @@
 
    var pixelStart = this.hexToPixel(uStart, vStart);
    var pixelEnd = this.hexToPixel(uEnd, vEnd);
-
-   var dx = pixelEnd[0] - pixelStart[0];
-   var dy = pixelEnd[1] - pixelStart[1];
-   var radian = Math.atan2(dy, dx) -  Math.atan2(0, 1);
-   var degree = radian / Math.PI * 180;
+   var degree = this.angle(1 ,0, uEnd-uStart, vEnd-vStart) + 30;
 
    // If the vector id exists, clear the graphics
    if(id in this.vectorsById){
@@ -99,26 +113,39 @@
     arrow.graphics.clear();
     arrowCap = this.vectorsById[id].arrowCap;
     arrowCap.graphics.clear();
+
   } else {
     arrow = new createjs.Shape();
     // Arrow cap
     arrowCap = new createjs.Shape();
-    // Add mouse event for drag and drop
+    // Add mouse events
     var hexagonGrid = this;
     arrowCap.on('pressmove', function(e) {
       var uv = hexagonGrid.pixelToHex(e.stageX, e.stageY);
       // console.log('Move vector', id, 'to', uv);
-      hexagonGrid.addVector(id, uStart, vStart, uv[0], uv[1], color);
+      hexagonGrid.addVector(id, e.target.uStart, e.target.vStart, uv[0], uv[1], color);
       hexagonGrid.stage.update();
-
       if (typeof onMove !== 'undefined'){
         onMove({u: uv[0], v: uv[1]});
       }
+    });
+    arrowCap.on('mouseover', function() {
+      arrowCap.graphics.clear();
+      arrowCap.graphics.s('blue').setStrokeStyle(10).mt(-15, +15).lt(0, 0).lt(-15, -15);
+      this.stage.update();
+    });
+    arrowCap.on('mouseout', function(){
+      arrowCap.graphics.clear();
+      arrowCap.graphics.s(color).setStrokeStyle(10).mt(-15, +15).lt(0, 0).lt(-15, -15);
+      this.stage.update();
     });
 
     this.stage.addChild(arrow);
     this.stage.addChild(arrowCap);
   }
+
+   arrowCap.uStart = uStart;
+   arrowCap.vStart = vStart;
 
    arrow.graphics.s(color).setStrokeStyle(10).mt(pixelStart[0], pixelStart[1]).lt(pixelEnd[0], pixelEnd[1]);
    arrowCap.graphics.s(color).setStrokeStyle(10).mt(-15, +15).lt(0, 0).lt(-15, -15);
@@ -129,7 +156,7 @@
    this.vectorsById[id] = {arrow: arrow, arrowCap: arrowCap};
  };
 
- HexagonGrid.prototype.drawHexGrid = function (radius, originX, originY) {
+ HexagonGrid.prototype.drawHexGrid = function (radius, originX, originY, onHexClick) {
      this.canvasOriginX = originX;
      this.canvasOriginY = originY;
 
@@ -140,11 +167,11 @@
          var a = {u: u, v: v};
          var b = {u: 0, v: 0};
 
-         if (this.Distance(a,b) > radius){
+         if (this.distance(a,b) > radius){
            continue;
          }
 
-         this.addHex(u, v);
+         this.addHex(u, v, onHexClick);
        }
      }
  };
@@ -163,12 +190,14 @@
    }
  };
 
- HexagonGrid.prototype.hexToPixel = function(u,v){
+ HexagonGrid.prototype.hexToPixel = function(u,v, noOffset){
    var y = this.radius * Math.sqrt(3) * (v + u/2);
    var x = this.radius * 3/2 * u;
 
-   x += this.canvasOriginX;
-   y += this.canvasOriginY;
+   if(typeof noOffset === 'undefined' || !noOffset){
+     x += this.canvasOriginX;
+     y += this.canvasOriginY;
+   }
 
    return [x, y];
  };
@@ -183,7 +212,7 @@
    return [q, r];
  };
 
- HexagonGrid.prototype.addHex = function(u, v) {
+ HexagonGrid.prototype.addHex = function(u, v, onClick) {
      var hexagonGrid = this;
      var pixel = this.hexToPixel(u,v);
 
@@ -198,6 +227,9 @@
      hexagon.on('click', function(e){
        console.log('clicked on', e.target.hexcoord);
        hexagonGrid.selectedCoord = e.target.hexcoord;
+       if(typeof onClick !== 'undefined'){
+         onClick(e);
+       }
      });
      var originalColor;
      hexagon.on('mouseover', function(){
@@ -217,6 +249,14 @@
 
  };
 
- HexagonGrid.prototype.Distance = function(a, b){
+ HexagonGrid.prototype.distance = function(a, b){
    return (Math.abs(a.u - b.u) + Math.abs(a.u + a.v - b.u - b.v) + Math.abs(a.v - b.v)) / 2;
+ };
+
+// Compute the angle (in degrees, rounded to the nearest integer) between two vectors
+ HexagonGrid.prototype.angle = function(u1 ,v1, u2, v2){
+   var pixel1 = this.hexToPixel(u1, v1, true);
+   var pixel2 = this.hexToPixel(u2, v2, true);
+   var radian = Math.atan2(pixel2[1], pixel2[0]) - Math.atan2(pixel1[1], pixel1[0]);
+   return Math.round(radian / Math.PI * 180);
  };
