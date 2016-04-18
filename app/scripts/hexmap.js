@@ -24,6 +24,9 @@
      // All vectors, indexed by id (id is unique)
      this.vectorsById = {};
 
+     // All sprites, indexed by id (id is unique)
+     this.spritesById = {};
+
      this.canvasOriginX = 0;
      this.canvasOriginY = 0;
 
@@ -64,21 +67,31 @@
   };
 
  // Add a sprite
- HexagonGrid.prototype.addSprite = function (u, v, image){
+ HexagonGrid.prototype.addSprite = function (id, u, v, image){
    var pixel = this.hexToPixel(u,v);
+   var offset = [-40,-40];
+   var pixelOffsetX = pixel[0] + offset[0];
+   var pixelOffsetY = pixel[1] + offset[1];
+   // Check if sprite id is alredy used
+   if(id in this.spritesById){
+     this.spritesById[id].x = pixelOffsetX;
+     this.spritesById[id].y = pixelOffsetY;
+   } else {
+     // peload image file and update stage once loaded
+     var handleFileLoad = function(){this.updateStage();};
+     var queue = new createjs.LoadQueue(true);
+     queue.on('fileload', handleFileLoad, this);
+     queue.loadFile(image);
 
-   // peload image file and update stage once loaded
-   var handleFileLoad = function(){this.updateStage();};
-   var queue = new createjs.LoadQueue(true);
-   queue.on('fileload', handleFileLoad, this);
-   queue.loadFile(image);
+     var bitmap = new createjs.Bitmap(image);
+     bitmap.x = pixelOffsetX;
+     bitmap.y = pixelOffsetY;
+     bitmap.scaleX = 0.4;
+     bitmap.scaleY = 0.4;
 
-   var bitmap = new createjs.Bitmap(image);
-   bitmap.x = pixel[0] - 40;
-   bitmap.y = pixel[1] - 40;
-   bitmap.scaleX = 0.4;
-   bitmap.scaleY = 0.4;
-   this.stage.addChild(bitmap);
+     this.spritesById[id] = bitmap;
+     this.stage.addChild(bitmap);
+   }
  };
 
 // Draw an vector arrow
@@ -138,7 +151,7 @@
    this.vectorsById[id] = {arrow: arrow, arrowCap: arrowCap};
  };
 
- HexagonGrid.prototype.drawHexGrid = function (radius, originX, originY) {
+ HexagonGrid.prototype.drawHexGrid = function (radius, originX, originY, onHexClick) {
      this.canvasOriginX = originX;
      this.canvasOriginY = originY;
 
@@ -153,7 +166,7 @@
            continue;
          }
 
-         this.addHex(u, v);
+         this.addHex(u, v, onHexClick);
        }
      }
  };
@@ -192,7 +205,7 @@
    return [q, r];
  };
 
- HexagonGrid.prototype.addHex = function(u, v) {
+ HexagonGrid.prototype.addHex = function(u, v, onClick) {
      var hexagonGrid = this;
      var pixel = this.hexToPixel(u,v);
 
@@ -207,6 +220,9 @@
      hexagon.on('click', function(e){
        console.log('clicked on', e.target.hexcoord);
        hexagonGrid.selectedCoord = e.target.hexcoord;
+       if(typeof onClick !== 'undefined'){
+         onClick(e);
+       }
      });
      var originalColor;
      hexagon.on('mouseover', function(){
