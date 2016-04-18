@@ -103,17 +103,26 @@
     arrow = new createjs.Shape();
     // Arrow cap
     arrowCap = new createjs.Shape();
-    // Add mouse event for drag and drop
+    // Add mouse events
     var hexagonGrid = this;
     arrowCap.on('pressmove', function(e) {
       var uv = hexagonGrid.pixelToHex(e.stageX, e.stageY);
       // console.log('Move vector', id, 'to', uv);
       hexagonGrid.addVector(id, uStart, vStart, uv[0], uv[1], color);
       hexagonGrid.stage.update();
-
       if (typeof onMove !== 'undefined'){
         onMove({u: uv[0], v: uv[1]});
       }
+    });
+    arrowCap.on('mouseover', function() {
+      arrowCap.graphics.clear();
+      arrowCap.graphics.s('blue').setStrokeStyle(10).mt(-15, +15).lt(0, 0).lt(-15, -15);
+      this.stage.update();
+    });
+    arrowCap.on('mouseout', function(){
+      arrowCap.graphics.clear();
+      arrowCap.graphics.s(color).setStrokeStyle(10).mt(-15, +15).lt(0, 0).lt(-15, -15);
+      this.stage.update();
     });
 
     this.stage.addChild(arrow);
