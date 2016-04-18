@@ -113,6 +113,7 @@
     arrow.graphics.clear();
     arrowCap = this.vectorsById[id].arrowCap;
     arrowCap.graphics.clear();
+
   } else {
     arrow = new createjs.Shape();
     // Arrow cap
@@ -122,7 +123,7 @@
     arrowCap.on('pressmove', function(e) {
       var uv = hexagonGrid.pixelToHex(e.stageX, e.stageY);
       // console.log('Move vector', id, 'to', uv);
-      hexagonGrid.addVector(id, uStart, vStart, uv[0], uv[1], color);
+      hexagonGrid.addVector(id, e.target.uStart, e.target.vStart, uv[0], uv[1], color);
       hexagonGrid.stage.update();
       if (typeof onMove !== 'undefined'){
         onMove({u: uv[0], v: uv[1]});
@@ -142,6 +143,9 @@
     this.stage.addChild(arrow);
     this.stage.addChild(arrowCap);
   }
+
+   arrowCap.uStart = uStart;
+   arrowCap.vStart = vStart;
 
    arrow.graphics.s(color).setStrokeStyle(10).mt(pixelStart[0], pixelStart[1]).lt(pixelEnd[0], pixelEnd[1]);
    arrowCap.graphics.s(color).setStrokeStyle(10).mt(-15, +15).lt(0, 0).lt(-15, -15);
