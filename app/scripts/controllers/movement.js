@@ -60,9 +60,9 @@ angular.module('hexMapJsApp')
       // Check if clicked hex is in allowed destinations
       for(var i = 0; i < allowedDestinations.length; i++){
         if(allowedDestinations[i].u === uv[0] && allowedDestinations[i].v === uv[1]){
-          console.log('allowed destination');
-          hexagonGrid.addSprite('shipNewPos', uv[0], uv[1], shipImage);
-          console.log('movementVector', $scope.movementVector);
+          // Compute new ship orientation to be a multiple og 60 degrees
+          var shipOrientation = Math.round((hexagonGrid.angle(0, 1, uv[0], uv[1]) + 180) / 60) * 60;
+          hexagonGrid.addSprite('shipNewPos', uv[0], uv[1], shipImage, shipOrientation);
           hexagonGrid.addVector(
             'newMovement',
             uv[0],

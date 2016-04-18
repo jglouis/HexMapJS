@@ -67,15 +67,15 @@
   };
 
  // Add a sprite
- HexagonGrid.prototype.addSprite = function (id, u, v, image){
+ HexagonGrid.prototype.addSprite = function (id, u, v, image, orientation){
+   var bitmap;
    var pixel = this.hexToPixel(u,v);
-   var offset = [-40,-40];
-   var pixelOffsetX = pixel[0] + offset[0];
-   var pixelOffsetY = pixel[1] + offset[1];
+
    // Check if sprite id is alredy used
    if(id in this.spritesById){
-     this.spritesById[id].x = pixelOffsetX;
-     this.spritesById[id].y = pixelOffsetY;
+     bitmap = this.spritesById[id];
+     bitmap.x = pixel[0];
+     bitmap.y = pixel[1];
    } else {
      // peload image file and update stage once loaded
      var handleFileLoad = function(){this.updateStage();};
@@ -83,15 +83,20 @@
      queue.on('fileload', handleFileLoad, this);
      queue.loadFile(image);
 
-     var bitmap = new createjs.Bitmap(image);
-     bitmap.x = pixelOffsetX;
-     bitmap.y = pixelOffsetY;
-     bitmap.scaleX = 0.4;
-     bitmap.scaleY = 0.4;
+     bitmap = new createjs.Bitmap(image);
+     bitmap.regX = 100;
+     bitmap.regY = 100;
+     bitmap.x = pixel[0];
+     bitmap.y = pixel[1];
+     bitmap.scaleX = bitmap.scaleY = 0.4;
 
      this.spritesById[id] = bitmap;
      this.stage.addChild(bitmap);
    }
+   // Set orientation
+    if(typeof orientation !== 'undefined'){
+      bitmap.rotation = orientation;
+    }
  };
 
 // Draw an vector arrow
@@ -100,11 +105,7 @@
 
    var pixelStart = this.hexToPixel(uStart, vStart);
    var pixelEnd = this.hexToPixel(uEnd, vEnd);
-
-   var dx = pixelEnd[0] - pixelStart[0];
-   var dy = pixelEnd[1] - pixelStart[1];
-   var radian = Math.atan2(dy, dx) -  Math.atan2(0, 1);
-   var degree = radian / Math.PI * 180;
+   var degree = this.angle(1 ,0, uEnd-uStart, vEnd-vStart) + 30;
 
    // If the vector id exists, clear the graphics
    if(id in this.vectorsById){
@@ -185,12 +186,14 @@
    }
  };
 
- HexagonGrid.prototype.hexToPixel = function(u,v){
+ HexagonGrid.prototype.hexToPixel = function(u,v, noOffset){
    var y = this.radius * Math.sqrt(3) * (v + u/2);
    var x = this.radius * 3/2 * u;
 
-   x += this.canvasOriginX;
-   y += this.canvasOriginY;
+   if(typeof noOffset === 'undefined' || !noOffset){
+     x += this.canvasOriginX;
+     y += this.canvasOriginY;
+   }
 
    return [x, y];
  };
@@ -244,4 +247,12 @@
 
  HexagonGrid.prototype.Distance = function(a, b){
    return (Math.abs(a.u - b.u) + Math.abs(a.u + a.v - b.u - b.v) + Math.abs(a.v - b.v)) / 2;
+ };
+
+// Compute the angle (in degrees, rounded to the nearest integer) between two vectors
+ HexagonGrid.prototype.angle = function(u1 ,v1, u2, v2){
+   var pixel1 = this.hexToPixel(u1, v1, true);
+   var pixel2 = this.hexToPixel(u2, v2, true);
+   var radian = Math.atan2(pixel2[1], pixel2[0]) - Math.atan2(pixel1[1], pixel1[0]);
+   return Math.round(radian / Math.PI * 180);
  };

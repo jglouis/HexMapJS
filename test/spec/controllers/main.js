@@ -55,4 +55,37 @@ describe('Controller: MainCtrl', function () {
     hexagonGrid.addVector('test2', 3, 2, 1, 0);
     expect(Object.keys(hexagonGrid.vectorsById).length).toBe(2);
   });
+
+  it('should test the angle between two hexagonal vectors', function() {
+    var tests = [
+      {
+        v1:{u: 0, v: 1},
+        v2:{u: 0, v: 1},
+        expected: 0
+      },
+      {
+        v1:{u: 1, v: 0},
+        v2:{u: 0, v: 1},
+        expected: 60
+      },
+      {
+        v1:{u: 2, v: 0},
+        v2:{u: 0, v: 3},
+        expected: 60
+      },
+      {
+        v1:{u: 2, v: 0},
+        v2:{u: 0, v: -1},
+        expected: -120
+      }
+    ];
+    for(var i = 0; i < tests.length; i++){
+      var v1 = tests[i].v1;
+      var v2 = tests[i].v2;
+      var expected = tests[i].expected;
+      var computed = hexagonGrid.angle(v1.u, v1.v, v2.u, v2.v);
+      expect(computed).toBe(expected);
+      expect(computed).toBe(expected);
+    }
+  });
 });
