@@ -9,6 +9,7 @@
  */
 
 var shipImage = 'images/space_ship_200x200.png';
+var shipImageOrange = 'images/space_ship_orange_200x200.png';
 var allowedDestinations = [];
 var displayAllowedDestinations = function (hexagonGrid, manoeuvrability, maxSpeed, foreseenDestination){
    hexagonGrid.setAllHexColor('grey');
@@ -62,7 +63,7 @@ angular.module('hexMapJsApp')
         if(allowedDestinations[i].u === uv[0] && allowedDestinations[i].v === uv[1]){
           // Compute new ship orientation to be a multiple og 60 degrees
           var shipOrientation = Math.round((hexagonGrid.angle(0, 1, uv[0], uv[1]) + 180) / 60) * 60;
-          hexagonGrid.addSprite('shipNewPos', uv[0], uv[1], shipImage, shipOrientation);
+          hexagonGrid.addSprite('shipNewPos', uv[0], uv[1], shipImageOrange, shipOrientation);
           hexagonGrid.addVector(
             'newMovement',
             uv[0],
