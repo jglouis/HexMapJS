@@ -167,7 +167,7 @@
          var a = {u: u, v: v};
          var b = {u: 0, v: 0};
 
-         if (this.Distance(a,b) > radius){
+         if (this.distance(a,b) > radius){
            continue;
          }
 
@@ -249,7 +249,7 @@
 
  };
 
- HexagonGrid.prototype.Distance = function(a, b){
+ HexagonGrid.prototype.distance = function(a, b){
    return (Math.abs(a.u - b.u) + Math.abs(a.u + a.v - b.u - b.v) + Math.abs(a.v - b.v)) / 2;
  };
 

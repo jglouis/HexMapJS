@@ -19,11 +19,11 @@ var displayAllowedDestinations = function (hexagonGrid, manoeuvrability, maxSpee
      for (var allowedV = foreseenDestination.v - manoeuvrability; allowedV <= foreseenDestination.v + manoeuvrability; allowedV++) {
        var allowedDestination = {u: allowedU, v: allowedV};
        // manoeuvrability
-       if (hexagonGrid.Distance(foreseenDestination, allowedDestination) > manoeuvrability){
+       if (hexagonGrid.distance(foreseenDestination, allowedDestination) > manoeuvrability){
          continue;
        }
        // max speed
-       if (hexagonGrid.Distance({u:0, v:0}, allowedDestination) > maxSpeed){
+       if (hexagonGrid.distance({u:0, v:0}, allowedDestination) > maxSpeed){
          continue;
        }
        allowedDestinations.push(allowedDestination);

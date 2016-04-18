@@ -24,9 +24,9 @@ describe('Controller: MainCtrl', function () {
   }));
 
   it('should compute distance between hexes', function () {
-    expect(hexagonGrid.Distance({u: 0, v:0},{u: 0, v:0})).toBe(0);
-    expect(hexagonGrid.Distance({u: 0, v:0},{u: 0, v: 1})).toBe(1);
-    expect(hexagonGrid.Distance({u: 3, v:0},{u: -3, v: 2})).toBe(6);
+    expect(hexagonGrid.distance({u: 0, v:0},{u: 0, v:0})).toBe(0);
+    expect(hexagonGrid.distance({u: 0, v:0},{u: 0, v: 1})).toBe(1);
+    expect(hexagonGrid.distance({u: 3, v:0},{u: -3, v: 2})).toBe(6);
   });
 
   it('should verify hex to pixel and pixel to hex to be inverse', function () {
