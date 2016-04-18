@@ -82,7 +82,6 @@ angular.module('hexMapJsApp')
     hexagonGrid.addSprite('ship', 0, 0, shipImage);
 
     $scope.$watch('[movementVector, maxSpeed, manoeuvrability]', function(){
-      console.log('New movement vector:', $scope.movementVector.u, $scope.movementVector.v);
       hexagonGrid.addVector(
         'movement',
         0,
