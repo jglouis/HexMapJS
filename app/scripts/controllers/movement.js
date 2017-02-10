@@ -62,7 +62,13 @@ angular.module('hexMapJsApp')
       for(var i = 0; i < allowedDestinations.length; i++){
         if(allowedDestinations[i].u === uv[0] && allowedDestinations[i].v === uv[1]){
           // Compute new ship orientation to be a multiple og 60 degrees
-          var shipOrientation = Math.round((hexagonGrid.angle(0, 1, uv[0], uv[1]) + 180) / 60) * 60;
+          var angleDividedBy60 = (hexagonGrid.angle(0, -1, uv[0], uv[1]) / 60);
+          var shipOrientation;
+          if (angleDividedBy60 < 3) {
+            shipOrientation = Math.floor(angleDividedBy60) * 60;
+          } else {
+            shipOrientation = Math.ceil(angleDividedBy60) * 60;
+          }
           hexagonGrid.addSprite('shipNewPos', uv[0], uv[1], shipImageOrange, shipOrientation);
           hexagonGrid.addVector(
             'newMovement',

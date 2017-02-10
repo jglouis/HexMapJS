@@ -76,7 +76,7 @@ describe('Controller: MainCtrl', function () {
       {
         v1:{u: 2, v: 0},
         v2:{u: 0, v: -1},
-        expected: -120
+        expected: 240
       }
     ];
     for(var i = 0; i < tests.length; i++){
