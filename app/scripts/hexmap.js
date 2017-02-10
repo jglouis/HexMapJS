@@ -254,9 +254,10 @@
  };
 
 // Compute the angle (in degrees, rounded to the nearest integer) between two vectors
+// returns an integer between 0 and 359
  HexagonGrid.prototype.angle = function(u1 ,v1, u2, v2){
    var pixel1 = this.hexToPixel(u1, v1, true);
    var pixel2 = this.hexToPixel(u2, v2, true);
    var radian = Math.atan2(pixel2[1], pixel2[0]) - Math.atan2(pixel1[1], pixel1[0]);
-   return Math.round(radian / Math.PI * 180);
+   return (Math.round(radian / Math.PI * 180) + 360) % 360;
  };
