@@ -35,6 +35,11 @@ angular
         controller: 'MovementCtrl',
         controllerAs: 'movement'
       })
+      .when('/hitangle', {
+        templateUrl: 'views/hitangle.html',
+        controller: 'HitangleCtrl',
+        controllerAs: 'hitangle'
+      })
       .otherwise({
         redirectTo: '/'
       });
